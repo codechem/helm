@@ -9,7 +9,7 @@
 # when the hash of the last commit in the branch you set up changes. This does
 # NOT apply to ownership claim operations, which are processed immediately.
 #
-repositoryID:
+repositoryID: b29d2fbb-fe94-45bd-a291-8b4be4992526
 owners: # (optional, used to claim repository ownership)
   - name: CodeChem
     email: devops@codechem.com
