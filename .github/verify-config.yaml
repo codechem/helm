@@ -1,0 +1,6 @@
+helm-extra-args: --timeout 600
+check-version-increment: false
+debug: true
+target-branch: main
+chart-repos:
+  - codechem=https://charts.codechem.com
