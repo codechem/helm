@@ -12,6 +12,15 @@ helm search repo codechem
 helm install example codechem/<chart>
 ```
 
+If you had already added this repo earlier, run `helm repo update` to retrieve the latest versions of the packages. You can then run `helm search repo
+codechem` to see the charts.
+
+To uninstall the chart:
+
+```bash
+helm uninstall example codechem/<chart>
+```
+
 ## License
 
 Copyright &copy; 2022 CodeChem
