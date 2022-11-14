@@ -1,0 +1,18 @@
+name: cloudflared
+maintainers:
+  - name: codechem
+    url: https://codechem.com
+apiVersion: v2
+appVersion: 2022.10.3
+version: 1.0.0
+description: CodeChem Cloudflared (Argo Tunnel) Helm Chart
+home: https://github.com/codechem/helm/tree/main/charts/cloudflared
+icon: https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg
+keywords:
+  - kubernetes
+  - cloudflare
+  - cloudflared
+  - argo
+  - tunnel
+sources:
+  - https://github.com/cloudflare/cloudflared
