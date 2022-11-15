@@ -19,9 +19,9 @@ sources:
 dependencies:
   - condition: global.postgresqlEnabled
     name: postgresql
-    repository: https://charts.kubito.dev
+    repository: https://charts.bitnami.com/bitnami
     version: 12.x.x
   - condition: global.redisEnabled
     name: redis
-    repository: https://traefik.github.io/charts
+    repository: https://charts.bitnami.com/bitnami
     version: 17.x.x

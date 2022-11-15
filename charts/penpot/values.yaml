@@ -311,9 +311,9 @@ config:
   postgresql:
     host: "postgresql.penpot.svc.cluster.local"
     port: 5432
-    database: "penpot"
-    username: "example"
-    password: "secretpassword"
+    database: ""
+    username: ""
+    password: ""
     existingSecret: ""
     secretKeys:
       usernameKey: ""
