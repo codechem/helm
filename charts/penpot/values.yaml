@@ -7,8 +7,8 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array.
 ##
 global:
-  postgresqlEnabled: true
-  redisEnabled: true
+  postgresqlEnabled: false
+  redisEnabled: false
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -475,3 +475,23 @@ config:
       gitlabClientSecretKey: ""
       oidcClientIDKey: ""
       oidcCientSecretKey: ""
+
+## @section PostgreSQL configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/postgresql))
+
+## @param postgresql.auth.username Name for a custom user to create.
+## @param postgresql.auth.password Password for the custom user to create.
+## @param postgresql.auth.database Name for a custom database to create.
+##
+postgresql:
+  auth:
+    username: example
+    password: secretpassword
+    database: penpot
+
+## @section Redis configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/redis))
+
+## @param redis.auth.enabled Whether to enable password authentication.
+##
+redis:
+  auth:
+    enabled: false

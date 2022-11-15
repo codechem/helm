@@ -45,11 +45,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                       | Description                                                                                                                                                        | Value  |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `global.postgresqlEnabled` | Whether to deploy the Bitnami PostgreSQL chart as subchart. Check [the official chart](https://artifacthub.io/packages/helm/bitnami/postgresql) for configuration. | `true` |
-| `global.redisEnabled`      | Whether to deploy the Bitnami Redis chart as subchart. Check [the official chart](https://artifacthub.io/packages/helm/bitnami/redis) for configuration.           | `true` |
-| `global.imagePullSecrets`  | Global Docker registry secret names as an array.                                                                                                                   | `[]`   |
+| Name                       | Description                                                                                                                                                        | Value   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `global.postgresqlEnabled` | Whether to deploy the Bitnami PostgreSQL chart as subchart. Check [the official chart](https://artifacthub.io/packages/helm/bitnami/postgresql) for configuration. | `false` |
+| `global.redisEnabled`      | Whether to deploy the Bitnami Redis chart as subchart. Check [the official chart](https://artifacthub.io/packages/helm/bitnami/redis) for configuration.           | `false` |
+| `global.imagePullSecrets`  | Global Docker registry secret names as an array.                                                                                                                   | `[]`    |
 
 
 ### Common parameters
@@ -233,6 +233,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.providers.secretKeys.gitlabClientSecretKey` | The GitLab client secret key to use from an existing secret.                                                                                                                                                                                                                                                  | `""`                                                                       |
 | `config.providers.secretKeys.oidcClientIDKey`       | The OpenID Connect client ID key to use from an existing secret.                                                                                                                                                                                                                                              | `""`                                                                       |
 | `config.providers.secretKeys.oidcCientSecretKey`    | The OpenID Connect client secret key to use from an existing secret.                                                                                                                                                                                                                                          | `""`                                                                       |
+
+
+### PostgreSQL configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/postgresql))
+
+| Name                       | Description                             | Value            |
+| -------------------------- | --------------------------------------- | ---------------- |
+| `postgresql.auth.username` | Name for a custom user to create.       | `example`        |
+| `postgresql.auth.password` | Password for the custom user to create. | `secretpassword` |
+| `postgresql.auth.database` | Name for a custom database to create.   | `penpot`         |
+
+
+### Redis configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/redis))
+
+| Name                 | Description                                | Value   |
+| -------------------- | ------------------------------------------ | ------- |
+| `redis.auth.enabled` | Whether to enable password authentication. | `false` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

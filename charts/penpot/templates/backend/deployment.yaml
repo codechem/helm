@@ -48,7 +48,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.config.postgresql.existingSecret }}
                   key: {{ .Values.config.postgresql.secretKeys.usernameKey }}
-                  optional: false
             {{- end }}
             - name: PENPOT_DATABASE_PASSWORD
             {{- if .Values.config.postgresql.password }}
@@ -58,7 +57,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.config.postgresql.existingSecret }}
                   key: {{ .Values.config.postgresql.secretKeys.passwordKey }}
-                  optional: false
             {{- end }}
             - name: AWS_ACCESS_KEY_ID
             {{- if .Values.config.assets.s3.accessKeyID }}
