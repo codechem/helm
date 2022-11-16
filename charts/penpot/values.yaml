@@ -146,32 +146,6 @@ frontend:
     ##    hosts:
     ##      - chart-example.local
     tls: []
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param frontend.podSecurityContext.enabled Enabled Penpot pods' security context
-  ## @param frontend.podSecurityContext.fsGroup Set Penpot pod's security context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param frontend.containerSecurityContext.enabled Enabled Penpot containers' security context
-  ## @param frontend.containerSecurityContext.runAsUser Set Penpot containers' security context runAsUser
-  ## @param frontend.containerSecurityContext.allowPrivilegeEscalation Set Penpot containers' security context allowPrivilegeEscalation
-  ## @param frontend.containerSecurityContext.capabilities.drop Set Penpot containers' security context capabilities to be dropped
-  ## @param frontend.containerSecurityContext.readOnlyRootFilesystem Set Penpot containers' security context readOnlyRootFilesystem
-  ## @param frontend.containerSecurityContext.runAsNonRoot Set Penpot container's security context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - all
-    readOnlyRootFilesystem: false
-    runAsNonRoot: true
   ## @param frontend.affinity Affinity for Penpot pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
@@ -297,7 +271,7 @@ config:
   ## @param config.publicURI The public domain to serve Penpot on. Set `disable-secure-session-cookies` in the flags if you plan on serving it on a non HTTPS domain.
   ## @param config.flags The feature flags to enable. Check [the official docs](https://help.penpot.app/technical-guide/configuration/) for more info.
   ##
-  publicURI: "http://example.com"
+  publicURI: "http://localhost:8080"
   flags: "enable-registration enable-login disable-demo-users disable-demo-warning"
   ## @param config.postgresql.host The PostgreSQL host to connect to.
   ## @param config.postgresql.port The PostgreSQL host port to use.
@@ -311,9 +285,9 @@ config:
   postgresql:
     host: "postgresql.penpot.svc.cluster.local"
     port: 5432
-    database: ""
     username: ""
     password: ""
+    database: ""
     existingSecret: ""
     secretKeys:
       usernameKey: ""

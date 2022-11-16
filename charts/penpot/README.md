@@ -15,9 +15,8 @@ Penpot makes design and prototyping accessible to every team in the world. It ha
 
 ## Prerequisites
 
-- Kubernetes 1.12+
+- Kubernetes 1.18+
 - Helm 3.2.0+
-- Argo Tunnel ID generated
 
 ## Installing the Chart
 
@@ -90,31 +89,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Frontend parameters
 
-| Name                                                         | Description                                                        | Value                |
-| ------------------------------------------------------------ | ------------------------------------------------------------------ | -------------------- |
-| `frontend.image.repository`                                  | The Docker repository to pull the image from.                      | `penpotapp/frontend` |
-| `frontend.image.tag`                                         | The image tag to use.                                              | `1.16.0-beta`        |
-| `frontend.image.imagePullPolicy`                             | The image pull policy to use.                                      | `IfNotPresent`       |
-| `frontend.replicaCount`                                      | The number of replicas to deploy.                                  | `1`                  |
-| `frontend.service.type`                                      | The service type to create.                                        | `ClusterIP`          |
-| `frontend.service.port`                                      | The service port to use.                                           | `80`                 |
-| `frontend.ingress.enabled`                                   | Enable ingress record generation for Penpot frontend.              | `false`              |
-| `frontend.ingress.annotations`                               | Mapped annotations for the frontend ingress.                       | `{}`                 |
-| `frontend.ingress.hosts`                                     | Array style hosts for the frontend ingress.                        | `[]`                 |
-| `frontend.ingress.tls`                                       | Array style TLS secrets for the frontend ingress.                  | `[]`                 |
-| `frontend.podSecurityContext.enabled`                        | Enabled Penpot pods' security context                              | `true`               |
-| `frontend.podSecurityContext.fsGroup`                        | Set Penpot pod's security context fsGroup                          | `1001`               |
-| `frontend.containerSecurityContext.enabled`                  | Enabled Penpot containers' security context                        | `true`               |
-| `frontend.containerSecurityContext.runAsUser`                | Set Penpot containers' security context runAsUser                  | `1001`               |
-| `frontend.containerSecurityContext.allowPrivilegeEscalation` | Set Penpot containers' security context allowPrivilegeEscalation   | `false`              |
-| `frontend.containerSecurityContext.capabilities.drop`        | Set Penpot containers' security context capabilities to be dropped | `["all"]`            |
-| `frontend.containerSecurityContext.readOnlyRootFilesystem`   | Set Penpot containers' security context readOnlyRootFilesystem     | `false`              |
-| `frontend.containerSecurityContext.runAsNonRoot`             | Set Penpot container's security context runAsNonRoot               | `true`               |
-| `frontend.affinity`                                          | Affinity for Penpot pods assignment                                | `{}`                 |
-| `frontend.nodeSelector`                                      | Node labels for Penpot pods assignment                             | `{}`                 |
-| `frontend.tolerations`                                       | Tolerations for Penpot pods assignment                             | `[]`                 |
-| `frontend.resources.limits`                                  | The resources limits for the Penpot frontend containers            | `{}`                 |
-| `frontend.resources.requests`                                | The requested resources for the Penpot frontend containers         | `{}`                 |
+| Name                             | Description                                                | Value                |
+| -------------------------------- | ---------------------------------------------------------- | -------------------- |
+| `frontend.image.repository`      | The Docker repository to pull the image from.              | `penpotapp/frontend` |
+| `frontend.image.tag`             | The image tag to use.                                      | `1.16.0-beta`        |
+| `frontend.image.imagePullPolicy` | The image pull policy to use.                              | `IfNotPresent`       |
+| `frontend.replicaCount`          | The number of replicas to deploy.                          | `1`                  |
+| `frontend.service.type`          | The service type to create.                                | `ClusterIP`          |
+| `frontend.service.port`          | The service port to use.                                   | `80`                 |
+| `frontend.ingress.enabled`       | Enable ingress record generation for Penpot frontend.      | `false`              |
+| `frontend.ingress.annotations`   | Mapped annotations for the frontend ingress.               | `{}`                 |
+| `frontend.ingress.hosts`         | Array style hosts for the frontend ingress.                | `[]`                 |
+| `frontend.ingress.tls`           | Array style TLS secrets for the frontend ingress.          | `[]`                 |
+| `frontend.affinity`              | Affinity for Penpot pods assignment                        | `{}`                 |
+| `frontend.nodeSelector`          | Node labels for Penpot pods assignment                     | `{}`                 |
+| `frontend.tolerations`           | Tolerations for Penpot pods assignment                     | `[]`                 |
+| `frontend.resources.limits`      | The resources limits for the Penpot frontend containers    | `{}`                 |
+| `frontend.resources.requests`    | The requested resources for the Penpot frontend containers | `{}`                 |
 
 
 ### Exporter parameters
@@ -158,7 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                | Description                                                                                                                                                                                                                         | Value                                                                      |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `config.publicURI`                                  | The public domain to serve Penpot on. Set `disable-secure-session-cookies` in the flags if you plan on serving it on a non HTTPS domain.                                                                                            | `http://example.com`                                                       |
+| `config.publicURI`                                  | The public domain to serve Penpot on. Set `disable-secure-session-cookies` in the flags if you plan on serving it on a non HTTPS domain.                                                                                            | `http://localhost:8080`                                                    |
 | `config.flags`                                      | The feature flags to enable. Check [the official docs](https://help.penpot.app/technical-guide/configuration/) for more info.                                                                                                       | `enable-registration enable-login disable-demo-users disable-demo-warning` |
 | `config.postgresql.host`                            | The PostgreSQL host to connect to.                                                                                                                                                                                                  | `postgresql.penpot.svc.cluster.local`                                      |
 | `config.postgresql.port`                            | The PostgreSQL host port to use.                                                                                                                                                                                                    | `5432`                                                                     |

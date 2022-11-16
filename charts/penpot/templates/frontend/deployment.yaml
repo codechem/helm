@@ -7,6 +7,8 @@ metadata:
     {{- include "penpot.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "penpot.frontendSelectorLabels" . | nindent 6 }}
@@ -20,16 +22,8 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       serviceAccountName: {{ include "penpot.serviceAccountName" . }}
-    {{ if .Values.frontend.podSecurityContext.enabled }}
-      securityContext:
-        {{- omit .Values.frontend.podSecurityContext "enabled" | toYaml | nindent 8 }}
-    {{- end }}
       containers:
         - name: {{ .Chart.Name }}-frontend
-        {{ if .Values.frontend.containerSecurityContext.enabled }}
-          securityContext:
-            {{- omit .Values.frontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-        {{- end }}
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.frontend.image.imagePullPolicy }}
           env:
