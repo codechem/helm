@@ -64,7 +64,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use.
 */}}
 {{- define "penpot.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
+{{- if .Values.serviceAccount.enabled -}}
     {{ default (include "penpot.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}

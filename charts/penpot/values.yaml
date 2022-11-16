@@ -356,6 +356,7 @@ config:
   ## @param config.telemetryEnabled Whether to enable sending of anonymous telemetry data.
   ##
   telemetryEnabled: true
+  ## @param config.smtp.enabled Whether to enable SMTP configuration.
   ## @param config.smtp.defaultFrom The SMTP default email to send from.
   ## @param config.smtp.defaultReplyTo The SMTP default email to reply to.
   ## @param config.smtp.host The SMTP host to use.
@@ -369,8 +370,9 @@ config:
   ## @param config.smtp.secretKeys.passwordKey The SMTP password to use from an existing secret.
   ##
   smtp:
-    defaultFrom: "no-reply@example.com"
-    defaultReplyTo: "no-reply@example.com"
+    enabled: false
+    defaultFrom: ""
+    defaultReplyTo: ""
     host: ""
     port: ""
     username: ""
@@ -387,39 +389,47 @@ config:
   ## Penpot Authentication providers parameters
   ##
   providers:
+    ## @param config.providers.google.enabled Whether to enable Google configuration. To enable Google auth, add `enable-login-with-google` to the flags.
     ## @param config.providers.google.clientID The Google client ID to use. To enable Google auth, add `enable-login-with-google` to the flags.
     ## @param config.providers.google.clientSecret The Google client secret to use. To enable Google auth, add `enable-login-with-google` to the flags.
     ##
     google:
+      enabled: false
       clientID: ""
       clientSecret: ""
-    ## @param config.providers.github.clientID The GitHub client ID to use. To enable GitHub auth, add `enable-login-with-github` to the flags.
-    ## @param config.providers.github.clientSecret The GitHub client secret to use. To enable GitHub auth, add `enable-login-with-github` to the flags.
+    ## @param config.providers.github.enabled Whether to enable GitHub configuration. To enable GitHub auth, also add `enable-login-with-github` to the flags.
+    ## @param config.providers.github.clientID The GitHub client ID to use.
+    ## @param config.providers.github.clientSecret The GitHub client secret to use.
     ##
     github:
+      enabled: false
       clientID: ""
       clientSecret: ""
-    ## @param config.providers.gitlab.baseURI The GitLab base URI to use. To enable GitLab auth, add `enable-login-with-gitlab` to the flags.
-    ## @param config.providers.gitlab.clientID The GitLab client ID to use. To enable GitLab auth, add `enable-login-with-gitlab` to the flags.
-    ## @param config.providers.gitlab.clientSecret The GitLab client secret to use. To enable GitLab auth, add `enable-login-with-gitlab` to the flags.
+    ## @param config.providers.gitlab.enabled Whether to enable GitLab configuration. To enable GitLab auth, also add `enable-login-with-gitlab` to the flags.
+    ## @param config.providers.gitlab.baseURI The GitLab base URI to use.
+    ## @param config.providers.gitlab.clientID The GitLab client ID to use.
+    ## @param config.providers.gitlab.clientSecret The GitLab client secret to use.
     ##
     gitlab:
+      enabled: false
       baseURI: "https://gitlab.com"
       clientID: ""
       clientSecret: ""
-    ## @param config.providers.oidc.baseURI The OpenID Connect base URI to use. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.clientID The OpenID Connect client ID to use. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.clientSecret The OpenID Connect client secret to use. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.authURI Optional OpenID Connect auth URI to use. Auto discovered if not provided. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.tokenURI Optional OpenID Connect token URI to use. Auto discovered if not provided. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.userURI Optional OpenID Connect user URI to use. Auto discovered if not provided. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.roles Optional OpenID Connect roles to use. If no role is provided, roles checking  disabled. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.rolesAttribute Optional OpenID Connect roles attribute to use. If not provided, the roles checking will be disabled. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.scopes Optional OpenID Connect scopes to use. This settings allow overwrite the required scopes, use with caution because penpot requres at least `name` and `email` attrs found on the user info. Optional, defaults to `openid profile`. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.nameAttribute Optional OpenID Connect name attribute to use. If not provided, the `name` prop will be used. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
-    ## @param config.providers.oidc.emailAttribute Optional OpenID Connect email attribute to use. If not provided, the `email` prop will be used. To enable OpenID Connect auth, add `enable-login-with-oidc` to the flags.
+    ## @param config.providers.oidc.enabled Whether to enable OIDC configuration. To enable OpenID Connect auth, also add `enable-login-with-oidc` to the flags.
+    ## @param config.providers.oidc.baseURI The OpenID Connect base URI to use.
+    ## @param config.providers.oidc.clientID The OpenID Connect client ID to use.
+    ## @param config.providers.oidc.clientSecret The OpenID Connect client secret to use.
+    ## @param config.providers.oidc.authURI Optional OpenID Connect auth URI to use. Auto discovered if not provided.
+    ## @param config.providers.oidc.tokenURI Optional OpenID Connect token URI to use. Auto discovered if not provided.
+    ## @param config.providers.oidc.userURI Optional OpenID Connect user URI to use. Auto discovered if not provided.
+    ## @param config.providers.oidc.roles Optional OpenID Connect roles to use. If no role is provided, roles checking  disabled.
+    ## @param config.providers.oidc.rolesAttribute Optional OpenID Connect roles attribute to use. If not provided, the roles checking will be disabled.
+    ## @param config.providers.oidc.scopes Optional OpenID Connect scopes to use. This settings allow overwrite the required scopes, use with caution because penpot requres at least `name` and `email` attrs found on the user info. Optional, defaults to `openid profile`.
+    ## @param config.providers.oidc.nameAttribute Optional OpenID Connect name attribute to use. If not provided, the `name` prop will be used.
+    ## @param config.providers.oidc.emailAttribute Optional OpenID Connect email attribute to use. If not provided, the `email` prop will be used.
     ##
     oidc:
+      enabled: false
       baseURI: ""
       clientID: ""
       clientSecret: ""
@@ -431,19 +441,21 @@ config:
       scopes: "scope1 scope2"
       nameAttribute: ""
       emailAttribute: ""
-    ## @param config.providers.ldap.host The LDAP host to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.port The LDAP port to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.ssl Whether to use SSL for the LDAP connection. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.startTLS Whether to utilize StartTLS for the LDAP connection. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.baseDN The LDAP base DN to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.bindDN The LDAP bind DN to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.bindPassword The LDAP bind password to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.attributesUsername The LDAP attributes username to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.attributesEmail The LDAP attributes email to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.attributesFullname The LDAP attributes fullname to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
-    ## @param config.providers.ldap.attributesPhoto The LDAP attributes photo format to use. To enable LDAP, add `enable-login-with-ldap` to the flags.
+    ## @param config.providers.ldap.enabled Whether to enable LDAP configuration. To enable LDAP, also add `enable-login-with-ldap` to the flags.
+    ## @param config.providers.ldap.host The LDAP host to use.
+    ## @param config.providers.ldap.port The LDAP port to use.
+    ## @param config.providers.ldap.ssl Whether to use SSL for the LDAP connection.
+    ## @param config.providers.ldap.startTLS Whether to utilize StartTLS for the LDAP connection.
+    ## @param config.providers.ldap.baseDN The LDAP base DN to use.
+    ## @param config.providers.ldap.bindDN The LDAP bind DN to use.
+    ## @param config.providers.ldap.bindPassword The LDAP bind password to use.
+    ## @param config.providers.ldap.attributesUsername The LDAP attributes username to use.
+    ## @param config.providers.ldap.attributesEmail The LDAP attributes email to use.
+    ## @param config.providers.ldap.attributesFullname The LDAP attributes fullname to use.
+    ## @param config.providers.ldap.attributesPhoto The LDAP attributes photo format to use.
     ##
     ldap:
+      enabled: false
       host: "ldap"
       port: 10389
       ssl: false
