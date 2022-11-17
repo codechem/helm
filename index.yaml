@@ -26,6 +26,36 @@ entries:
   penpot:
   - apiVersion: v2
     appVersion: 1.16.0-beta
+    created: "2022-11-17T02:40:43.89113086Z"
+    dependencies:
+    - condition: global.postgresqlEnabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - condition: global.redisEnabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    description: CodeChem Penpot Helm Chart
+    digest: 58270b67144d1cc15266b50d75a8d9a6cf7d0ae604bcbb9009a83e30120cac9b
+    home: https://github.com/codechem/helm/tree/main/charts/penpot
+    icon: https://avatars.githubusercontent.com/u/30179644?s=200&v=4
+    keywords:
+    - kubernetes
+    - penpot
+    - penpotapp
+    - design
+    maintainers:
+    - name: codechem
+      url: https://codechem.com
+    name: penpot
+    sources:
+    - https://github.com/penpot/penpot
+    urls:
+    - https://github.com/codechem/helm/releases/download/penpot-1.0.4/penpot-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
+    appVersion: 1.16.0-beta
     created: "2022-11-17T02:36:15.96490276Z"
     dependencies:
     - condition: global.postgresqlEnabled
@@ -144,4 +174,4 @@ entries:
     urls:
     - https://github.com/codechem/helm/releases/download/penpot-1.0.0/penpot-1.0.0.tgz
     version: 1.0.0
-generated: "2022-11-17T02:36:15.964927261Z"
+generated: "2022-11-17T02:40:43.891239561Z"
