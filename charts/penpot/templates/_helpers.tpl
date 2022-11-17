@@ -38,6 +38,7 @@ Common labels.
 helm.sh/chart: {{ include "penpot.chart" . }}
 app.kubernetes.io/name: {{ include "penpot.name" . }}-frontend
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/connection: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -50,10 +51,12 @@ Selector labels.
 {{- define "penpot.frontendSelectorLabels" -}}
 app.kubernetes.io/name: {{ include "penpot.name" . }}-frontend
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/connection: {{ .Release.Name }}
 {{- end -}}
 {{- define "penpot.backendSelectorLabels" -}}
 app.kubernetes.io/name: {{ include "penpot.name" . }}-backend
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/connection: {{ .Release.Name }}
 {{- end -}}
 {{- define "penpot.exporterSelectorLabels" -}}
 app.kubernetes.io/name: {{ include "penpot.name" . }}-exporter
