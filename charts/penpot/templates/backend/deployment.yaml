@@ -24,15 +24,16 @@ spec:
         {{- omit .Values.backend.podSecurityContext "enabled" | toYaml | nindent 8 }}
     {{- end }}
       serviceAccountName: {{ include "penpot.serviceAccountName" . }}
-      podAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/connection
-              operator: In
-              values:
-              - {{ .Release.Name }}
-          topologyKey: "kubernetes.io/hostname"
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/connection
+                operator: In
+                values:
+                - {{ .Release.Name }}
+            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: {{ .Chart.Name }}-backend
         {{ if .Values.backend.containerSecurityContext.enabled }}
