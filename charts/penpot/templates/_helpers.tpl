@@ -38,7 +38,6 @@ Common labels.
 helm.sh/chart: {{ include "penpot.chart" . }}
 app.kubernetes.io/name: {{ include "penpot.name" . }}-frontend
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/connection: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
