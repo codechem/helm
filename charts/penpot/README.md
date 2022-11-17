@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.assets.s3.secretKeys.secretAccessKey`       | The S3 secret access key to use from an existing secret.                                                                                                                                                                            | `""`                                                                       |
 | `config.assets.s3.secretKeys.endpointURIKey`        | The S3 endpoint URI to use from an existing secret.                                                                                                                                                                                 | `""`                                                                       |
 | `config.telemetryEnabled`                           | Whether to enable sending of anonymous telemetry data.                                                                                                                                                                              | `true`                                                                     |
-| `config.smtp.enabled`                               | Whether to enable SMTP configuration.                                                                                                                                                                                               | `false`                                                                    |
+| `config.smtp.enabled`                               | Whether to enable SMTP configuration. You also need to add the 'enable-smtp' flag to the PENPOT_FLAGS variable.                                                                                                                     | `false`                                                                    |
 | `config.smtp.defaultFrom`                           | The SMTP default email to send from.                                                                                                                                                                                                | `""`                                                                       |
 | `config.smtp.defaultReplyTo`                        | The SMTP default email to reply to.                                                                                                                                                                                                 | `""`                                                                       |
 | `config.smtp.host`                                  | The SMTP host to use.                                                                                                                                                                                                               | `""`                                                                       |
@@ -264,6 +264,32 @@ helm install example -f values.yaml codechem/example
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Configuration and installation details
+
+## Common configuration
+
+There are two types of configuration: options (properties that requieres some value) and flags (that just enables or disables something). The PENPOT_FLAGS environment variable will have an ordered list of strings using this format: `<enable|disable>-<flag-name>`.
+
+Regarding the flags, they are all listed in the [official docs](https://help.penpot.app/technical-guide/configuration), and here are the [additional flags](https://help.penpot.app/technical-guide/configuration/#other-flags) which are not mentioned in the chart configuration above, but you can still use them!
+
+## Authentication providers
+
+For configuration of the authentication with third-party auth providers you will need to configure penpot and set the correct callback of your penpot instance in the auth-provider configuration. The callback has the following format:
+
+```txt
+<https://<your_domain>/api/auth/oauth/<oauth_provider>/callback>
+```
+
+You will need to change `<your_domain>` and `<oauth_provider>` according to your setup. This is how it looks with the `gitlab.com` provider:
+
+```txt
+<https://<your_domain>/api/auth/oauth/gitlab/callback>
+```
+
+## Redis configuration
+
+The redis configuration is very simple, just provide a valid Redis URI. Redis is used mainly for websocket notifications coordination. Currently just a non authentication connection is supported!
 
 ## License
 

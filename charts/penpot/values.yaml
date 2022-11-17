@@ -330,7 +330,7 @@ config:
   ## @param config.telemetryEnabled Whether to enable sending of anonymous telemetry data.
   ##
   telemetryEnabled: true
-  ## @param config.smtp.enabled Whether to enable SMTP configuration.
+  ## @param config.smtp.enabled Whether to enable SMTP configuration. You also need to add the 'enable-smtp' flag to the PENPOT_FLAGS variable.
   ## @param config.smtp.defaultFrom The SMTP default email to send from.
   ## @param config.smtp.defaultReplyTo The SMTP default email to reply to.
   ## @param config.smtp.host The SMTP host to use.
