@@ -29,10 +29,10 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: app.kubernetes.io/name
+              - key: app.kubernetes.io/instance
                 operator: In
                 values:
-                - {{ include "penpot.name" . }}-frontend
+                - {{ .Release.Name }}
             topologyKey: "kubernetes.io/hostname"
       containers:
         - name: {{ .Chart.Name }}-backend
