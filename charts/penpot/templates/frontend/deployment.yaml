@@ -158,7 +158,7 @@ spec:
           {{- end }}
 
           {{- if .Values.config.providers.google.enabled }}
-          {{- if .Values.config.providers.secretKeys.googleClientIDKey }}
+          {{- if not .Values.config.providers.secretKeys.googleClientIDKey }}
             - name: PENPOT_GOOGLE_CLIENT_ID
               value: {{ .Values.config.providers.google.clientID | quote }}
           {{- else }}
@@ -181,7 +181,7 @@ spec:
           {{- end }}
 
           {{- if .Values.config.providers.github.enabled }}
-          {{- if .Values.config.providers.secretKeys.githubClientIDKey }}
+          {{- if not .Values.config.providers.secretKeys.githubClientIDKey }}
             - name: PENPOT_GITHUB_CLIENT_ID
               value: {{ .Values.config.providers.github.clientID | quote }}
           {{- else }}
