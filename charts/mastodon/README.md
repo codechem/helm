@@ -6,8 +6,10 @@ Mastodon is a free, open-source social network server based on ActivityPub where
 
 ```console
 helm repo add codechem https://charts.codechem.com
-helm install mastodon codechem/mastodon
+helm install mastodon codechem/mastodon --wait
 ```
+
+> **NOTE**: Using the `--wait` flag is recommended. Helm hooks are used for the order of operations, and timeout might occur on slower machines.
 
 ## Introduction
 
