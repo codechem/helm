@@ -48,11 +48,19 @@ spec:
               topologyKey: kubernetes.io/hostname
       volumes:
         - name: assets
+      {{- if .Values.persistence.assets.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "mastodon.fullname" . }}-assets
+            claimName: {{ .Values.persistence.assets.existingClaim | default "mastodon-assets" }}
+      {{- else }}
+          emptyDir: {}
+      {{- end }}
         - name: system
+      {{- if .Values.persistence.system.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "mastodon.fullname" . }}-system
+            claimName: {{ .Values.persistence.system.existingClaim | default "mastodon-system" }}
+      {{- else }}
+          emptyDir: {}
+      {{- end }}
     {{- end }}
       containers:
         - name: {{ .Chart.Name }}-sidekiq

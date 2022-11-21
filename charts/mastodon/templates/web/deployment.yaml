@@ -38,12 +38,20 @@ spec:
     {{- if eq .Values.config.storage.type "fs" }}
       volumes:
         - name: assets
+      {{- if .Values.persistence.assets.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "mastodon.fullname" . }}-assets
-        - name: system
-          persistentVolumeClaim:
-            claimName: {{ template "mastodon.fullname" . }}-system
+            claimName: {{ .Values.persistence.assets.existingClaim | default "mastodon-assets" }}
+      {{- else }}
+          emptyDir: {}
       {{- end }}
+        - name: system
+      {{- if .Values.persistence.system.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.system.existingClaim | default "mastodon-system" }}
+      {{- else }}
+          emptyDir: {}
+      {{- end }}
+    {{- end }}
       {{- if .Values.config.initialAdmin.enabled }}
       initContainers:
         - name: create-initial-admin
