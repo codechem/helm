@@ -1,0 +1,24 @@
+{{- if and .Values.persistence.assets.enabled (not .Values.persistence.assets.existingClaim) (eq .Values.config.storage.type "fs") -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "mastodon.fullname" . }}-assets
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mastodon.labels" . | nindent 4 }}
+{{- if .Values.persistence.assets.annotations }}
+  annotations:
+{{ toYaml .Values.persistence.assets.annotations | indent 4 }}
+{{- end }}
+spec:
+  accessModes:
+  {{- range .Values.persistence.assets.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.assets.size | quote }}
+{{- if .Values.persistence.assets.storageClass }}
+  storageClassName: "{{ .Values.persistence.assets.storageClass }}"
+{{- end }}
+{{- end }}

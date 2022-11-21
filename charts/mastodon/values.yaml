@@ -1,0 +1,804 @@
+## Default values for Mastodon
+
+## @section Global parameters
+
+## @param global.postgresqlEnabled Whether to deploy the Bitnami PostgreSQL chart as subchart. Check [the official chart](https://artifacthub.io/packages/helm/bitnami/postgresql) for configuration.
+## @param global.redisEnabled Whether to deploy the Bitnami Redis chart as subchart. Check [the official chart](https://artifacthub.io/packages/helm/bitnami/redis) for configuration.
+## @param global.elasticsearchEnabled Whether to deploy the Bitnami Elasticsearch chart as subchart. Check [the official chart](https://artifacthub.io/packages/helm/bitnami/elasticsearch) for configuration. If you don't have Elasticsearch, full-text search will be disabled. If you enable ES after the initial install, you will need to manually run `RAILS_ENV=production bundle exec rake chewy:sync`. See [the docs](https://docs.joinmastodon.org/admin/optional/elasticsearch/).
+## @param global.imagePullSecrets Global Docker registry secret names as an array.
+##
+global:
+  postgresqlEnabled: true
+  redisEnabled: true
+  elasticsearchEnabled: true
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param image.repository The Docker repository to pull the image from.
+## @param image.tag The image tag to use.
+## @param image.imagePullPolicy The image pull policy to use.
+##
+image:
+  repository: tootsuite/mastodon
+  tag: v4.0.2
+  imagePullPolicy: IfNotPresent
+## @param serviceAccount.enabled Specifies whether a ServiceAccount should be created.
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+## @param serviceAccount.name The name of the ServiceAccount to use. If not set and enabled is true, a name is generated using the fullname template.
+##
+serviceAccount:
+  enabled: true
+  annotations: {}
+  name: ""
+
+## @section Web parameters
+
+## Mastodon Web
+##
+web:
+  ## @param web.replicaCount The number of replicas to deploy.
+  ##
+  replicaCount: 1
+  ## @param web.service.type The service type to create.
+  ## @param web.service.port The service port to use.
+  ##
+  service:
+    type: ClusterIP
+    port: 3000
+  ## @param web.ingress.enabled Enable ingress record generation for Mastodon web.
+  ## @param web.ingress.annotations Mapped annotations for the web ingress.
+  ## @param web.ingress.hosts Array style hosts for the web ingress.
+  ## @param web.ingress.tls Array style TLS secrets for the web ingress.
+  ##
+  ingress:
+    enabled: false
+    ## E.g.
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   kubernetes.io/tls-acme: "true"
+    ##
+    annotations:
+      {}
+    ## E.g.
+    ## hosts:
+    ##   - host: mastodon-example.local
+    hosts: []
+    ## E.g.
+    ##  - secretName: chart-example-tls
+    ##    hosts:
+    ##      - chart-example.local
+    tls: []
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param web.podSecurityContext.enabled Enabled Web pods' security context
+  ## @param web.podSecurityContext.runAsUser Set Web pod's security context runAsUser
+  ## @param web.podSecurityContext.runAsGroup Set Web pod's security context runAsGroup
+  ## @param web.podSecurityContext.fsGroup Set Web pod's security context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    runAsUser: 991
+    runAsGroup: 991
+    fsGroup: 991
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param web.containerSecurityContext.enabled Enabled Web containers' security context
+  ## @param web.containerSecurityContext.runAsUser Set Web containers' security context runAsUser
+  ## @param web.containerSecurityContext.allowPrivilegeEscalation Set Web containers' security context allowPrivilegeEscalation
+  ## @param web.containerSecurityContext.capabilities.drop Set Web containers' security context capabilities to be dropped
+  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set Web containers' security context readOnlyRootFilesystem
+  ## @param web.containerSecurityContext.runAsNonRoot Set Web container's security context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+  ## @param web.affinity Affinity for Web pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## @param web.nodeSelector Node labels for Web pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param web.tolerations Tolerations for Web pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## Web web resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param web.resources.limits The resources limits for the web containers
+  ## @param web.resources.requests The requested resources for the web containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## @param web.autoscaling.enabled Whether to enable horizontal pod autoscaling.
+  ## @param web.autoscaling.minReplicas The minimum number of pod replicas to allow.
+  ## @param web.autoscaling.maxReplicas The maximum number of pod replicas to allow.
+  ## @param web.autoscaling.targetCPUUtilizationPercentage The target CPU utilization percentage to aim for.
+  ## @param web.autoscaling.targetMemoryUtilizationPercentage The target memory utilization percentage to aim for.
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+## @section Sidekiq parameters
+
+## Mastodon Sidekiq
+##
+sidekiq:
+  ## @param sidekiq.replicaCount The number of replicas to deploy.
+  ##
+  replicaCount: 1
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param sidekiq.podSecurityContext.enabled Enabled Sidekiq pods' security context
+  ## @param sidekiq.podSecurityContext.runAsUser Set Sidekiq pod's security context runAsUser
+  ## @param sidekiq.podSecurityContext.runAsGroup Set Sidekiq pod's security context runAsGroup
+  ## @param sidekiq.podSecurityContext.fsGroup Set Sidekiq pod's security context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    runAsUser: 991
+    runAsGroup: 991
+    fsGroup: 991
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param sidekiq.containerSecurityContext.enabled Enabled Sidekiq containers' security context
+  ## @param sidekiq.containerSecurityContext.runAsUser Set Sidekiq containers' security context runAsUser
+  ## @param sidekiq.containerSecurityContext.allowPrivilegeEscalation Set Sidekiq containers' security context allowPrivilegeEscalation
+  ## @param sidekiq.containerSecurityContext.capabilities.drop Set Sidekiq containers' security context capabilities to be dropped
+  ## @param sidekiq.containerSecurityContext.readOnlyRootFilesystem Set Sidekiq containers' security context readOnlyRootFilesystem
+  ## @param sidekiq.containerSecurityContext.runAsNonRoot Set Sidekiq container's security context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+  ## @param sidekiq.affinity Affinity for Sidekiq pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## @param sidekiq.nodeSelector Node labels for Sidekiq pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param sidekiq.tolerations Tolerations for Sidekiq pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## Sidekiq sidekiq resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param sidekiq.resources.limits The resources limits for the Sidekiq containers
+  ## @param sidekiq.resources.requests The requested resources for the Sidekiq containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## @param sidekiq.autoscaling.enabled Whether to enable horizontal pod autoscaling.
+  ## @param sidekiq.autoscaling.minReplicas The minimum number of pod replicas to allow.
+  ## @param sidekiq.autoscaling.maxReplicas The maximum number of pod replicas to allow.
+  ## @param sidekiq.autoscaling.targetCPUUtilizationPercentage The target CPU utilization percentage to aim for.
+  ## @param sidekiq.autoscaling.targetMemoryUtilizationPercentage The target memory utilization percentage to aim for.
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+## @section Streaming parameters
+
+## Mastodon Streaming
+##
+streaming:
+  ## @param streaming.replicaCount The number of replicas to deploy.
+  ##
+  replicaCount: 1
+  ## @param streaming.service.type The service type to create.
+  ## @param streaming.service.port The service port to use.
+  ##
+  service:
+    type: ClusterIP
+    port: 4000
+  ## @param streaming.ingress.enabled Enable ingress record generation for Mastodon streaming.
+  ## @param streaming.ingress.annotations Mapped annotations for the streaming ingress.
+  ## @param streaming.ingress.hosts Array style hosts for the streaming ingress.
+  ## @param streaming.ingress.tls Array style TLS secrets for the streaming ingress.
+  ##
+  ingress:
+    enabled: false
+    ## E.g.
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   kubernetes.io/tls-acme: "true"
+    ##
+    annotations:
+      {}
+    ## E.g.
+    ## hosts:
+    ##   - host: mastodon-streaming-example.local
+    hosts: []
+    ## E.g.
+    ##  - secretName: chart-example-tls
+    ##    hosts:
+    ##      - chart-example.local
+    tls: []
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param streaming.podSecurityContext.enabled Enabled Streaming pods' security context
+  ## @param streaming.podSecurityContext.runAsUser Set Streaming pod's security context runAsUser
+  ## @param streaming.podSecurityContext.runAsGroup Set Streaming pod's security context runAsGroup
+  ## @param streaming.podSecurityContext.fsGroup Set Streaming pod's security context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    runAsUser: 991
+    runAsGroup: 991
+    fsGroup: 991
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param streaming.containerSecurityContext.enabled Enabled Streaming containers' security context
+  ## @param streaming.containerSecurityContext.runAsUser Set Streaming containers' security context runAsUser
+  ## @param streaming.containerSecurityContext.allowPrivilegeEscalation Set Streaming containers' security context allowPrivilegeEscalation
+  ## @param streaming.containerSecurityContext.capabilities.drop Set Streaming containers' security context capabilities to be dropped
+  ## @param streaming.containerSecurityContext.readOnlyRootFilesystem Set Streaming containers' security context readOnlyRootFilesystem
+  ## @param streaming.containerSecurityContext.runAsNonRoot Set Streaming container's security context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+  ## @param streaming.affinity Affinity for Streaming pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+  ## @param streaming.nodeSelector Node labels for Streaming pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param streaming.tolerations Tolerations for Streaming pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## Streaming streaming resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param streaming.resources.limits The resources limits for the streaming containers
+  ## @param streaming.resources.requests The requested resources for the streaming containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## @param streaming.autoscaling.enabled Whether to enable horizontal pod autoscaling.
+  ## @param streaming.autoscaling.minReplicas The minimum number of pod replicas to allow.
+  ## @param streaming.autoscaling.maxReplicas The maximum number of pod replicas to allow.
+  ## @param streaming.autoscaling.targetCPUUtilizationPercentage The target CPU utilization percentage to aim for.
+  ## @param streaming.autoscaling.targetMemoryUtilizationPercentage The target memory utilization percentage to aim for.
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+## @section Persistence parameters
+
+## Mastodon persistence
+##
+persistence:
+  assets:
+    ## @param persistence.assets.enabled Enable persistence using Persistent Volume Claims.
+    ##
+    enabled: false
+    ## @param persistence.assets.storageClass Persistent Volume storage class.
+    ## If defined, storageClassName: <storageClass>.
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param persistence.assets.size Persistent Volume size.
+    ##
+    size: 10Gi
+    ## @param persistence.assets.existingClaim The name of an existing PVC to use for persistence.
+    ##
+    existingClaim: ""
+    ## @param persistence.assets.accessModes Persistent Volume access modes.
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param persistence.assets.annotations Persistent Volume Claim annotations.
+    ##
+    annotations: {}
+  system:
+    ## @param persistence.system.enabled Enable persistence using Persistent Volume Claims.
+    ##
+    enabled: false
+    ## @param persistence.system.storageClass Persistent Volume storage class.
+    ## If defined, storageClassName: <storageClass>.
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param persistence.system.size Persistent Volume size.
+    ##
+    size: 50Gi
+    ## @param persistence.system.existingClaim The name of an existing PVC to use for persistence.
+    ##
+    existingClaim: ""
+    ## @param persistence.system.accessModes Persistent Volume access modes.
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param persistence.system.annotations Persistent Volume Claim annotations.
+    ##
+    annotations: {}
+
+## Job parameters
+
+## @param job.databaseMigration.annotations PostgreSQL Database Migration job annotations. Allows for additional annotations for the job, useful in GitOps scenarios like ArgoCD Helm deployments.
+## @param job.assetsPrecompile.annotations Mastodon Assets precompile job annotations.
+## @param job.chewyUpgrade.annotations Elasticsearch Chewy Upgrade job annotations.
+## @param job.cron.mediaRemoval.enabled Whether to enable the media removal cronjob.
+## @param job.cron.mediaRemoval.schedule The interval of the media removal cronjob. Default is 1 week.
+##
+job:
+  databaseMigration:
+    ## E.g.
+    ## annotations:
+    ##   "argocd.argoproj.io/hook": Sync
+    ##   "argocd.argoproj.io/sync-wave": "0"
+    ##   "argocd.argoproj.io/hook-delete-policy": BeforeHookCreation,HookSucceeded
+    ##
+    annotations: {}
+  assetsPrecompile:
+    annotations: {}
+  chewyUpgrade:
+    annotations: {}
+  cron:
+    mediaRemoval:
+      enabled: true
+      schedule: "0 0 * * 0"
+
+## @section Configuration parameters
+
+## Mastodon configuration
+##
+config:
+  ## @param config.locale The instance locale. Available locales can be seen [here](https://github.com/mastodon/mastodon/blob/main/config/application.rb#L71).
+  ## @param config.localDomain The root domain for the instance. For example, `instance.com`.
+  ## @param config.webDomain If set, needs to be the subdomain of the local domain. For example, `mastodon.instance.com`. More information can be found [here](https://docs.joinmastodon.org/admin/config/#federation). Don't forget to check the proxy redirection requirements as well.
+  ## @param config.singleUserMode Whether to disable registrations and only use the single created account in the database.
+  ##
+  locale: "en"
+  localDomain: "mastodon.localdomain"
+  webDomain: ""
+  singleUserMode: false
+  ## @param config.keys.secretKeyBase The secret key base, required to set up. You can generate it with `openssl rand -hex 64`. Ignored if set in an existing secret.
+  ## @param config.keys.otpSecret The OTP secret, required to set up. You can generate it with `openssl rand -hex 64`. Ignored if set in an existing secret.
+  ## @param config.keys.vapidPrivateKey The Vapid private key, required to set up. You can use `openssl` to generate, see example in [values.yaml](https://artifacthub.io/packages/helm/codechem/mastodon?modal=values). Ignored if set in an existing secret.
+  ## @param config.keys.vapidPublicKey The Vapid public key, required to set up. You can use `openssl` to generate, see example in [values.yaml](https://artifacthub.io/packages/helm/codechem/mastodon?modal=values). Ignored if set in an existing secret.
+  ## @param config.keys.existingSecret The name of an existing secret.
+  ## @param config.keys.secretKeys.secretKeyBaseKey The secret key base key to use from an existing secret.
+  ## @param config.keys.secretKeys.otpSecretKey The otp secret key to use from an existing secret.
+  ## @param config.keys.secretKeys.vapidPrivateKey The Vapid private key to use from an existing secret.
+  ## @param config.keys.secretKeys.vapidPublicKey The Vapid public key to use from an existing secret.
+  ##
+  keys:
+    secretKeyBase: ""
+    otpSecret: ""
+    ## Example generation of the Vapid keys:
+    ##
+    ## openssl ecparam -name prime256v1 -genkey -noout -out vapid_private_key.pem
+    ## openssl ec -in vapid_private_key.pem -pubout -out vapid_public_key.pem
+    ## echo -n VAPID_PRIVATE_KEY=;cat vapid_private_key.pem | sed -e "1 d" -e "$ d" | tr -d "\n"; echo
+    ## echo -n VAPID_PUBLIC_KEY=;cat vapid_public_key.pem | sed -e "1 d" -e "$ d" | tr -d "\n"; echo
+    ##
+    vapidPrivateKey: ""
+    vapidPublicKey: ""
+    existingSecret: ""
+    secretKeys:
+      secretKeyBaseKey: ""
+      otpSecretKey: ""
+      vapidPrivateKey: ""
+      vapidPublicKey: ""
+  ## @param config.initialAdmin.enabled Whether to create an initial admin user. The password is autogenerated, so you need to manually reset it with `kubectl exec -it deployment/mastodon-web -- tootctl accounts modify <USERNAME> --reset-password`.
+  ## @param config.initialAdmin.username The username for the initial admin user. The username `admin` is reserved.
+  ## @param config.initialAdmin.email The email for the initial admin user.
+  ##
+  initialAdmin:
+    enabled: false
+    username: ""
+    email: ""
+  ## @param config.sidekiq.concurrency The number of threads to start with sidekiq. Also used to set the database pool to the same number as the threads.
+  ##
+  sidekiq:
+    concurrency: 25
+  ## @param config.streaming.workers Controls the number of worker processes for handling real-time updates.
+  ## @param config.streaming.baseURL The base URL for the streaming service. Required if the streaming API is deployed to a different domain.
+  ##
+  streaming:
+    workers: 1
+    baseURL: ""
+  ## @param config.postgresql.host The PostgreSQL host to connect to.
+  ## @param config.postgresql.port The PostgreSQL host port to use.
+  ## @param config.postgresql.database The PostgreSQL database to use.
+  ## @param config.postgresql.username The database username to use. Ignored if set in an existing secret.
+  ## @param config.postgresql.password The database username to use. Ignored if set in an existing secret.
+  ## @param config.postgresql.existingSecret The name of an existing secret.
+  ## @param config.postgresql.secretKeys.usernameKey The username key to use from an existing secret.
+  ## @param config.postgresql.secretKeys.passwordKey The password key to use from an existing secret.
+  ##
+  postgresql:
+    host: "postgresql"
+    port: 5432
+    username: ""
+    password: ""
+    database: ""
+    existingSecret: ""
+    secretKeys:
+      usernameKey: ""
+      passwordKey: ""
+  ## @param config.redis.host The Redis host to connect to.
+  ## @param config.redis.port The Redis host port to use.
+  ##
+  redis:
+    host: "redis-master"
+    port: 6379
+  ## @param config.elasticsearch.enabled Whether Elasticsearch is enabled. Differs from `global.elasticsearchEnabled`, which is used to confirm if you have your own elasticsearch instance, or you want to deploy one as a dependency chart.
+  ## @param config.elasticsearch.host The Elasticsearch host to connect to.
+  ## @param config.elasticsearch.port The Elasticsearch host port to use.
+  ##
+  elasticsearch:
+    enabled: true
+    host: "mastodon-elasticsearch-master-hl"
+    port: 9200
+  ## @param config.storage.type The storage type for assets to use. Use `fs` for filesystem, and `s3` for S3.
+  ## @param config.storage.filesystem.assetsDirectory The assets storage directory to use if you chose the filesystem storage type.
+  ## @param config.storage.filesystem.systemDirectory The system storage directory to use if you chose the filesystem storage type.
+  ## @param config.storage.s3.accessKeyID The S3 access key ID to use if you chose the S3 storage type. Ignored if set in an existing secret.
+  ## @param config.storage.s3.secretAccessKey The S3 secret access key to use if you chose the S3 storage type. Ignored if set in an existing secret.
+  ## @param config.storage.s3.region The S3 region to use if you chose the S3 storage type.
+  ## @param config.storage.s3.bucket The name of the S3 bucket to use if you chose the S3 storage type.
+  ## @param config.storage.s3.endpointURI The S3 endpoint URI to use if you chose the S3 storage type.
+  ## @param config.storage.s3.hostname The S3 hostname to use if you chose the S3 storage type.
+  ## @param config.storage.s3.aliasHost The S3 alias host to use if you chose the S3 storage type. If you have a caching proxy, enter its base URL here.
+  ## @param config.storage.s3.existingSecret The name of an existing secret.
+  ## @param config.storage.s3.secretKeys.accessKeyIDKey The S3 access key ID to use from an existing secret.
+  ## @param config.storage.s3.secretKeys.secretAccessKey The S3 secret access key to use from an existing secret.
+  ##
+  storage:
+    type: "fs"
+    filesystem:
+      assetsDirectory: "/opt/mastodon/public/assets"
+      systemDirectory: "/opt/mastodon/public/system"
+    s3:
+      accessKeyID: ""
+      secretAccessKey: ""
+      region: ""
+      bucket: ""
+      endpointURI: ""
+      hostname: ""
+      aliasHost: ""
+      existingSecret: ""
+      secretKeys:
+        accessKeyIDKey: ""
+        secretAccessKey: ""
+  ## @param config.smtp.enabled Whether to enable SMTP configuration.
+  ## @param config.smtp.caFile The path of the CA file to use.
+  ## @param config.smtp.authMethod The authentication method to use.
+  ## @param config.smtp.deliveryMethod The delivery method to use.
+  ## @param config.smtp.fromAddress The SMTP default email to send from.
+  ## @param config.smtp.replyTo The SMTP default email to reply to.
+  ## @param config.smtp.domain The SMTP domain to use.
+  ## @param config.smtp.server The SMTP host to use.
+  ## @param config.smtp.port The SMTP port to use.
+  ## @param config.smtp.username The SMTP username to use. Ignored if set in an existing secret.
+  ## @param config.smtp.password The SMTP password to use. Ignored if set in an existing secret.
+  ## @param config.smtp.enableStartTLS The enable start TLS strategy to use.
+  ## @param config.smtp.openSSLVerifyMode The openssl verify mode to use.
+  ## @param config.smtp.tls Whether to use TLS for the SMTP connection.
+  ## @param config.smtp.existingSecret The name of an existing secret.
+  ## @param config.smtp.secretKeys.usernameKey The SMTP username to use from an existing secret.
+  ## @param config.smtp.secretKeys.passwordKey The SMTP password to use from an existing secret.
+  ##
+  smtp:
+    enabled: false
+    caFile: "/etc/ssl/certs/ca-certificates.crt"
+    authMethod: "plain"
+    deliveryMethod: "smtp"
+    fromAddress: "mastodon@example.com"
+    replyTo: "mastodon@example.com"
+    domain: ""
+    server: "smtp.gmail.com"
+    port: "587"
+    username: ""
+    password: ""
+    enableStartTLS: "auto"
+    openSSLVerifyMode: "peer"
+    tls: false
+    existingSecret: ""
+    secretKeys:
+      usernameKey: ""
+      passwordKey: ""
+  ## @param config.metrics.statsd.address The statsd address to publish Mastodon metrics to.
+  ##
+  metrics:
+    statsd:
+      address: ""
+  ## Mastodon Authentication providers parameters
+  ##
+  providers:
+    ## @param config.providers.oidc.enabled Whether to enable OIDC configuration.
+    ## @param config.providers.oidc.displayName The Open ID Connect display name.
+    ## @param config.providers.oidc.issuer The Open ID Connect issuer.
+    ## @param config.providers.oidc.discovery Whether to enable discovery for Open ID Connect.
+    ## @param config.providers.oidc.scope The Open ID Connect scopes, comma separated.
+    ## @param config.providers.oidc.uidField The Open ID Connect UID field.
+    ## @param config.providers.oidc.clientID The Open ID Connect client ID. Ignored if set in an existing secret.
+    ## @param config.providers.oidc.clientSecret The Open ID Connect client secret. Ignored if set in an existing secret.
+    ## @param config.providers.oidc.redirectURI The Open ID Connect redirection URI.
+    ## @param config.providers.oidc.assumeEmailVerified Whether to assume that the email is verified for Open ID Connect.
+    ## @param config.providers.oidc.clientAuthMethod The Open ID Connect client auth method.
+    ## @param config.providers.oidc.responseType The Open ID Connect response type.
+    ## @param config.providers.oidc.responseMode The Open ID Connect response mode.
+    ## @param config.providers.oidc.display The Open ID Connect display type.
+    ## @param config.providers.oidc.prompt The Open ID Connect prompt type.
+    ## @param config.providers.oidc.sendNonce Whether to enable send nonce for Open ID Connect.
+    ## @param config.providers.oidc.sendScopeToTokenEndpoint Whether to enable sending scope to token endpoint for Open ID Connect.
+    ## @param config.providers.oidc.idpLogoutRedirectURI The Open ID Connect IDP logout redirect URI.
+    ## @param config.providers.oidc.httpScheme The Open ID Connect HTTP scheme.
+    ## @param config.providers.oidc.host The Open ID Connect host.
+    ## @param config.providers.oidc.port The Open ID Connect port.
+    ## @param config.providers.oidc.jwksURI The Open ID Connect JWKs URI.
+    ## @param config.providers.oidc.authEndpoint The Open ID Connect auth endpoint.
+    ## @param config.providers.oidc.tokenEndpoint The Open ID Connect token endpoint.
+    ## @param config.providers.oidc.userInfoEndpoint The Open ID Connect user information endpoint.
+    ## @param config.providers.oidc.endSessionEndpoint The Open ID Connect end session endpoint.
+    ##
+    oidc:
+      enabled: false
+      displayName: "example-label"
+      issuer: "https://login.example.space/auth/realms/example-space"
+      discovery: true
+      scope: "openid,profile"
+      uidField: "uid"
+      clientID: ""
+      clientSecret: ""
+      redirectURI: "https://example.com/auth/auth/openid_connect/callback"
+      assumeEmailVerified: true
+      clientAuthMethod: "basic"
+      responseType: "code"
+      responseMode: "query"
+      display: "page"
+      prompt: ""
+      sendNonce: true
+      sendScopeToTokenEndpoint: true
+      idpLogoutRedirectURI: ""
+      httpScheme: ""
+      host: ""
+      port: ""
+      jwksURI: ""
+      authEndpoint: ""
+      tokenEndpoint: ""
+      userInfoEndpoint: ""
+      endSessionEndpoint: ""
+    ## @param config.providers.saml.enabled Whether to enable SAML configuration.
+    ## @param config.providers.saml.acsURL The SAML access URL.
+    ## @param config.providers.saml.issuer The SAML issuer.
+    ## @param config.providers.saml.idpSsoTargetURL The SAML IDP SSO target URL.
+    ## @param config.providers.saml.idpCert The SAML IDP certificate.
+    ## @param config.providers.saml.idpCertFingerprint The SAML IDP certificate fingerprint.
+    ## @param config.providers.saml.nameIdentifierFormat The SAML name identifier format.
+    ## @param config.providers.saml.cert The SAML certificate. Ignored if set in an existing secret.
+    ## @param config.providers.saml.privateKey The SAML private key. Ignored if set in an existing secret.
+    ## @param config.providers.saml.wantAssertionSigned Whether to enable assertion signing for SAML.
+    ## @param config.providers.saml.wantAssertionEncrypted Whether to enable assertion encryption for SAML.
+    ## @param config.providers.saml.assumeEmailVerified Whether to assumme the email is verified for SAML.
+    ## @param config.providers.saml.uidAttribute The SAML UID attribute.
+    ## @param config.providers.saml.attributesStatements.uid The SAML attributes statements UID.
+    ## @param config.providers.saml.attributesStatements.email The SAML attributes statements email.
+    ## @param config.providers.saml.attributesStatements.fullName The SAML attributes statements full name.
+    ## @param config.providers.saml.attributesStatements.firstName The SAML attributes statements first name.
+    ## @param config.providers.saml.attributesStatements.lastName The SAML attributes statements last name.
+    ## @param config.providers.saml.attributesStatements.verified Whether the attribute statements should be verified for SAML.
+    ## @param config.providers.saml.attributesStatements.verifiedEmail The SAML attributes statements verified email.
+    ##
+    saml:
+      enabled: false
+      acsURL: "http://mastodon.example.com/auth/auth/saml/callback"
+      issuer: "mastodon"
+      idpSsoTargetURL: "https://login.example.com/auth/realms/example/protocol/saml"
+      idpCert: "-----BEGIN CERTIFICATE-----[your_cert_content]-----END CERTIFICATE-----"
+      idpCertFingerprint: ""
+      nameIdentifierFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+      cert: ""
+      privateKey: ""
+      wantAssertionSigned: true
+      wantAssertionEncrypted: true
+      assumeEmailVerified: true
+      uidAttribute: "urn:oid:0.9.2342.19200300.100.1.1"
+      attributesStatements:
+        uid: "urn:oid:0.9.2342.19200300.100.1.1"
+        email: "urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+        fullName: "urn:oid:2.16.840.1.113730.3.1.241"
+        firstName: "urn:oid:2.5.4.42"
+        lastName: "urn:oid:2.5.4.4"
+        verified: true
+        verifiedEmail: ""
+    ## @param config.providers.cas.enabled Whether to enable CAS configuration.
+    ## @param config.providers.cas.oauthRedirectAtSignIn Whether to force redirect local login to CAS.
+    ## @param config.providers.cas.url The CAS provider URL.
+    ## @param config.providers.cas.host The CAS provider host.
+    ## @param config.providers.cas.port The CAS provider port.
+    ## @param config.providers.cas.ssl Whether to enable SSL for the CAS provider.
+    ## @param config.providers.cas.validateURL The CAS provider validation URL.
+    ## @param config.providers.cas.callbackURL The CAS provider callback URL.
+    ## @param config.providers.cas.logoutURL The CAS provider logout URL.
+    ## @param config.providers.cas.loginURL The CAS provider login URL.
+    ## @param config.providers.cas.uidField The CAS provider UID field.
+    ## @param config.providers.cas.caPath The CAS provider CA path.
+    ## @param config.providers.cas.disableSslVerification Whether to disable SSL verification for the CAS provider.
+    ## @param config.providers.cas.assumeEmailVerified Whether to assume email is verified for the CAS provider.
+    ## @param config.providers.cas.keys.uid The CAS provider UID key.
+    ## @param config.providers.cas.keys.name The CAS provider name key.
+    ## @param config.providers.cas.keys.email The CAS provider email key.
+    ## @param config.providers.cas.keys.nickname The CAS provider nickname key.
+    ## @param config.providers.cas.keys.firstName The CAS provider first name key.
+    ## @param config.providers.cas.keys.lastName The CAS provider last name key.
+    ## @param config.providers.cas.keys.location The CAS provider location key.
+    ## @param config.providers.cas.keys.image The CAS provider image key.
+    ## @param config.providers.cas.keys.phone The CAS provider phone key.
+    ##
+    cas:
+      enabled: false
+      oauthRedirectAtSignIn: false
+      url: "https://sso.myserver.com"
+      host: "sso.myserver.com"
+      port: 443
+      ssl: true
+      validateURL: ""
+      callbackURL: ""
+      logoutURL: ""
+      loginURL: ""
+      uidField: "user"
+      caPath: ""
+      disableSslVerification: false
+      assumeEmailVerified: true
+      keys:
+        uid: "user"
+        name: "name"
+        email: "email"
+        nickname: "nickname"
+        firstName: "firstname"
+        lastName: "lastname"
+        location: "location"
+        image: "image"
+        phone: "phone"
+    ## @param config.providers.pam.enabled Whether to enable PAM configuration.
+    ## @param config.providers.pam.emailDomain The PAM provider email domain.
+    ## @param config.providers.pam.defaultService The PAM provider default service.
+    ## @param config.providers.pam.controlledService The PAM provider controlled service.
+    ##
+    pam:
+      enabled: false
+      emailDomain: "example.com"
+      defaultService: "rpam"
+      controlledService: "rpam"
+    ## @param config.providers.ldap.enabled Whether to enable LDAP configuration.
+    ## @param config.providers.ldap.host The LDAP host to use.
+    ## @param config.providers.ldap.port The LDAP port to use.
+    ## @param config.providers.ldap.method The LDAP method to use.
+    ## @param config.providers.ldap.base The LDAP base to use.
+    ## @param config.providers.ldap.bindOn The LDAP bind to use.
+    ## @param config.providers.ldap.password The LDAP password to use. Ignored if set in an existing secret.
+    ## @param config.providers.ldap.uid The LDAP UID to use.
+    ## @param config.providers.ldap.mail The LDAP mail to use.
+    ## @param config.providers.ldap.searchFilter The LDAP search filter to use
+    ## @param config.providers.ldap.uidConversion.enabled Whether to enable UID conversion.
+    ## @param config.providers.ldap.uidConversion.search The UID conversion search pattern for LDAP.
+    ## @param config.providers.ldap.uidConversion.replace The UID conversion replace pattern for LDAP.
+    ##
+    ldap:
+      enabled: false
+      host: "myservice.namespace.svc"
+      port: 389
+      method: "simple_tls"
+      base: ""
+      bindOn: ""
+      password: ""
+      uid: "cn"
+      mail: "mail"
+      searchFilter: "(|(%{uid}=%{email})(%{mail}=%{email}))"
+      uidConversion:
+        enabled: true
+        search: "., -"
+        replace: "_"
+    ## @param config.providers.existingSecret The name of an existing secret to use.
+    ## @param config.providers.secretKeys.oidcClientIDKey The OpenID Connect client ID key to use from an existing secret.
+    ## @param config.providers.secretKeys.oidcCientSecretKey The OpenID Connect client secret key to use from an existing secret.
+    ## @param config.providers.secretKeys.samlCertKey The SAML certificate key to use from an existing secret.
+    ## @param config.providers.secretKeys.samlPrivateKey The SAML private key to use from an existing secret.
+    ## @param config.providers.secretKeys.ldapPasswordKey The LDAP password key to use from an existing secret.
+    ##
+    existingSecret: ""
+    secretKeys:
+      oidcClientIDKey: ""
+      oidcCientSecretKey: ""
+      samlCertKey: ""
+      samlPrivateKey: ""
+      ldapPasswordKey: ""
+
+## @section Elasticsearch configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/elasticsearch))
+
+## @param elasticsearch.image.tag Elasticsearch image tag (immutable tags are recommended).
+## @param elasticsearch.master.replicaCount Number of master-elegible replicas to deploy.
+## @param elasticsearch.data.replicaCount Number of data-only replicas to deploy.
+## @param elasticsearch.coordinating.replicaCount Number of coordinating-only replicas to deploy.
+## @param elasticsearch.ingest.replicaCount Number of ingest-only replicas to deploy.
+##
+elasticsearch:
+  image:
+    tag: 7
+  master:
+    replicaCount: 1
+  data:
+    replicaCount: 1
+  coordinating:
+    replicaCount: 1
+  ingest:
+    replicaCount: 1
+
+## @section PostgreSQL configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/postgresql))
+
+## @param postgresql.auth.database Name for a custom database to create.
+## @param postgresql.auth.username Name for a custom user to create.
+## @param postgresql.auth.password Password for the custom user to create.
+## @param postgresql.auth.postgresPassword Password for the `postgres` admin user.
+##
+postgresql:
+  auth:
+    database: mastodon
+    username: mastodon
+    password: "secretpassword"
+    postgresPassword: "supersecretpassword"
+
+## @section Redis configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/redis))
+
+## @param redis.auth.enabled Whether to enable password authentication.
+## @param redis.replica.replicaCount Number of Redis replicas to deploy.
+##
+redis:
+  auth:
+    enabled: false
+  replica:
+    replicaCount: 1

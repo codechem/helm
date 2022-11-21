@@ -1,0 +1,32 @@
+name: mastodon
+maintainers:
+  - name: codechem
+    url: https://codechem.com
+apiVersion: v2
+appVersion: 4.0.2
+version: 1.0.0
+description: CodeChem Mastodon Helm Chart
+home: https://github.com/codechem/helm/tree/main/charts/mastodon
+icon: https://files.mastodon.social/accounts/avatars/000/013/179/original/b4ceb19c9c54ec7e.png
+keywords:
+  - kubernetes
+  - mastodon
+  - decentralized
+  - social
+  - network
+sources:
+  - https://github.com/mastodon/mastodon
+
+dependencies:
+  - condition: global.postgresqlEnabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.x.x
+  - condition: global.redisEnabled
+    name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 17.x.x
+  - condition: global.elasticsearchEnabled
+    name: elasticsearch
+    repository: https://charts.bitnami.com/bitnami
+    version: 19.x.x
