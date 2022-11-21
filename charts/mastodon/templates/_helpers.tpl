@@ -60,15 +60,15 @@ checksum/config-configmap: {{ include ( print $.Template.BasePath "/configmap.ya
 {{- end }}
 
 {{/*
-Create the name of the service account to use.
+Create the name of the service account to use
 */}}
 {{- define "mastodon.serviceAccountName" -}}
-{{- if .Values.serviceAccount.enabled -}}
-    {{ default (include "mastodon.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
+{{- if .Values.serviceAccount.enabled }}
+{{- default (include "mastodon.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
 
 {{/*
 Create a default fully qualified name for dependent services.
