@@ -461,9 +461,9 @@ config:
   postgresql:
     host: "postgresql"
     port: 5432
-    username: ""
-    password: ""
-    database: ""
+    username: "mastodon"
+    password: "secretpassword"
+    database: "mastodon"
     existingSecret: ""
     secretKeys:
       usernameKey: ""
