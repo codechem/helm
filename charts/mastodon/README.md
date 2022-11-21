@@ -9,7 +9,7 @@ helm repo add codechem https://charts.codechem.com
 helm install mastodon codechem/mastodon --wait
 ```
 
-> **NOTE**: Using the `--wait` flag is recommended. Helm hooks are used for the order of operations, and timeout might occur on slower machines.
+> **NOTE**: Using the `--wait` flag is recommended. Helm hooks are used for the order of operations, as well as database migrations which can be slow, so timeout might occur on slower machines, preventing the full deployment of the resources.
 
 ## Introduction
 
