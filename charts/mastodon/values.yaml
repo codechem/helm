@@ -784,6 +784,9 @@ elasticsearch:
 ## @param postgresql.auth.username Name for a custom user to create.
 ## @param postgresql.auth.password Password for the custom user to create.
 ## @param postgresql.auth.postgresPassword Password for the `postgres` admin user.
+## @param postgresql.auth.existingSecret Existing secret containing the passwords for the `postgres` and the regular user. Must set both.
+## @param postgresql.auth.secretKeys.adminPasswordKey Existing password key in a secret for the `postgres` admin user.
+## @param postgresql.auth.secretKeys.userPasswordKey Existing password key in a secret for the regular user you set up in the config section.
 ##
 postgresql:
   auth:
@@ -791,6 +794,10 @@ postgresql:
     username: mastodon
     password: "secretpassword"
     postgresPassword: "supersecretpassword"
+    existingSecret: ""
+    secretKeys:
+      adminPasswordKey: ""
+      userPasswordKey: ""
 
 ## @section Redis configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/redis))
 
