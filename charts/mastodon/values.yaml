@@ -449,8 +449,8 @@ config:
   streaming:
     workers: 1
     baseURL: ""
-  ## @param config.postgresql.host The PostgreSQL host to connect to.
-  ## @param config.postgresql.port The PostgreSQL host port to use.
+  ## @param config.postgresql.host The PostgreSQL host to connect to. Only used if `global.postgresqlEnabled` is `false`.
+  ## @param config.postgresql.port The PostgreSQL host port to use. Only used if `global.postgresqlEnabled` is `false`.
   ## @param config.postgresql.database The PostgreSQL database to use.
   ## @param config.postgresql.username The database username to use. Ignored if set in an existing secret.
   ## @param config.postgresql.password The database username to use. Ignored if set in an existing secret.
@@ -459,7 +459,7 @@ config:
   ## @param config.postgresql.secretKeys.passwordKey The password key to use from an existing secret.
   ##
   postgresql:
-    host: "postgresql"
+    host: "postgresql.postgresql.svc.cluster.local"
     port: 5432
     username: "mastodon"
     password: "secretpassword"
@@ -468,19 +468,19 @@ config:
     secretKeys:
       usernameKey: ""
       passwordKey: ""
-  ## @param config.redis.host The Redis host to connect to.
-  ## @param config.redis.port The Redis host port to use.
+  ## @param config.redis.host The Redis host to connect to. Only used if `global.redisEnabled` is `false`.
+  ## @param config.redis.port The Redis host port to use. Only used if `global.redisEnabled` is `false`.
   ##
   redis:
-    host: "redis-master"
+    host: "redis-master.redis.svc.cluster.local"
     port: 6379
   ## @param config.elasticsearch.enabled Whether Elasticsearch is enabled. Differs from `global.elasticsearchEnabled`, which is used to confirm if you have your own elasticsearch instance, or you want to deploy one as a dependency chart.
-  ## @param config.elasticsearch.host The Elasticsearch host to connect to.
-  ## @param config.elasticsearch.port The Elasticsearch host port to use.
+  ## @param config.elasticsearch.host The Elasticsearch host to connect to. Only used if `global.elasticsearchEnabled` is `false`.
+  ## @param config.elasticsearch.port The Elasticsearch host port to use. Only used if `global.elasticsearchEnabled` is `false`.
   ##
   elasticsearch:
     enabled: true
-    host: "mastodon-elasticsearch-master-hl"
+    host: "elasticsearch-master-hl.logging.svc.cluster.local"
     port: 9200
   ## @param config.storage.type The storage type for assets to use. Use `fs` for filesystem, and `s3` for S3.
   ## @param config.storage.filesystem.assetsDirectory The assets storage directory to use if you chose the filesystem storage type.

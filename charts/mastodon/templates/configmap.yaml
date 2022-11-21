@@ -20,15 +20,30 @@ data:
 {{- if .Values.config.streaming.baseURL }}
   STREAMING_API_BASE_URL: {{ .Values.config.streaming.baseURL | quote }}
 {{- end }}
+{{- if .Values.global.postgresqlEnabled }}
+  DB_HOST: {{ template "mastodon.postgresql.fullname" . }}
+  DB_PORT: "5432"
+{{- else }}
   DB_HOST: {{ .Values.config.postgresql.host | quote }}
   DB_PORT: {{ .Values.config.postgresql.port | quote }}
+{{- end }}
   DB_NAME: {{ .Values.config.postgresql.database | quote }}
+{{- if .Values.global.redisEnabled }}
+  REDIS_HOST: {{ template "mastodon.redis.fullname" . }}-master
+  REDIS_PORT: "6379"
+{{- else }}
   REDIS_HOST: {{ .Values.config.redis.host | quote }}
   REDIS_PORT: {{ .Values.config.redis.port | quote }}
+{{- end }}
 {{- if .Values.config.elasticsearch.enabled }}
   ES_ENABLED: "true"
+  {{- if .Values.global.elasticsearchEnabled }}
+  ES_HOST: {{ template "mastodon.elasticsearch.fullname" . }}-master-hl
+  ES_PORT: "9200"
+  {{- else }}
   ES_HOST: {{ .Values.config.elasticsearch.host | quote }}
   ES_PORT: {{ .Values.config.elasticsearch.port | quote }}
+  {{- end }}
 {{- end }}
 {{- if eq .Values.config.storage.type "s3" }}
   S3_ENABLED: "true"

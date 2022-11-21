@@ -18,6 +18,16 @@ spec:
       name: {{ include "mastodon.fullname" . }}-database-migrations
     spec:
       restartPolicy: Never
+    {{- if .Values.global.postgresqlEnabled }}
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: {{ include "mastodon.fullname" . }}-config
+          command: ['sh', '-c', 'until nc -vz ${DB_HOST} ${DB_PORT}; do echo "Waiting for postgresql to be ready..."; sleep 3; done;']
+    {{- end }}
       containers:
         - name: {{ include "mastodon.fullname" . }}-database-migrations
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
