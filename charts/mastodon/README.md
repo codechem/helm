@@ -72,95 +72,95 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Web parameters
 
-| Name                                                    | Description                                                     | Value       |
-| ------------------------------------------------------- | --------------------------------------------------------------- | ----------- |
-| `web.replicaCount`                                      | The number of replicas to deploy.                               | `1`         |
-| `web.service.type`                                      | The service type to create.                                     | `ClusterIP` |
-| `web.service.port`                                      | The service port to use.                                        | `3000`      |
-| `web.ingress.enabled`                                   | Enable ingress record generation for Mastodon web.              | `false`     |
-| `web.ingress.annotations`                               | Mapped annotations for the web ingress.                         | `{}`        |
-| `web.ingress.hosts`                                     | Array style hosts for the web ingress.                          | `[]`        |
-| `web.ingress.tls`                                       | Array style TLS secrets for the web ingress.                    | `[]`        |
-| `web.podSecurityContext.enabled`                        | Enabled Web pods' security context                              | `true`      |
-| `web.podSecurityContext.runAsUser`                      | Set Web pod's security context runAsUser                        | `991`       |
-| `web.podSecurityContext.runAsGroup`                     | Set Web pod's security context runAsGroup                       | `991`       |
-| `web.podSecurityContext.fsGroup`                        | Set Web pod's security context fsGroup                          | `991`       |
-| `web.containerSecurityContext.enabled`                  | Enabled Web containers' security context                        | `false`     |
-| `web.containerSecurityContext.runAsUser`                | Set Web containers' security context runAsUser                  | `1001`      |
-| `web.containerSecurityContext.allowPrivilegeEscalation` | Set Web containers' security context allowPrivilegeEscalation   | `false`     |
-| `web.containerSecurityContext.capabilities.drop`        | Set Web containers' security context capabilities to be dropped | `["all"]`   |
-| `web.containerSecurityContext.readOnlyRootFilesystem`   | Set Web containers' security context readOnlyRootFilesystem     | `false`     |
-| `web.containerSecurityContext.runAsNonRoot`             | Set Web container's security context runAsNonRoot               | `true`      |
-| `web.affinity`                                          | Affinity for Web pods assignment                                | `{}`        |
-| `web.nodeSelector`                                      | Node labels for Web pods assignment                             | `{}`        |
-| `web.tolerations`                                       | Tolerations for Web pods assignment                             | `[]`        |
-| `web.resources.limits`                                  | The resources limits for the web containers                     | `{}`        |
-| `web.resources.requests`                                | The requested resources for the web containers                  | `{}`        |
-| `web.autoscaling.enabled`                               | Whether to enable horizontal pod autoscaling.                   | `false`     |
-| `web.autoscaling.minReplicas`                           | The minimum number of pod replicas to allow.                    | `1`         |
-| `web.autoscaling.maxReplicas`                           | The maximum number of pod replicas to allow.                    | `100`       |
-| `web.autoscaling.targetCPUUtilizationPercentage`        | The target CPU utilization percentage to aim for.               | `80`        |
-| `web.autoscaling.targetMemoryUtilizationPercentage`     | The target memory utilization percentage to aim for.            | `80`        |
+| Name                                                    | Description                                                                                                     | Value       |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------- |
+| `web.replicaCount`                                      | The number of replicas to deploy.                                                                               | `1`         |
+| `web.service.type`                                      | The service type to create.                                                                                     | `ClusterIP` |
+| `web.service.port`                                      | The service port to use.                                                                                        | `3000`      |
+| `web.ingress.enabled`                                   | Enable ingress record generation for Mastodon web.                                                              | `false`     |
+| `web.ingress.annotations`                               | Mapped annotations for the web ingress.                                                                         | `{}`        |
+| `web.ingress.hosts`                                     | Array style hosts for the web ingress.                                                                          | `[]`        |
+| `web.ingress.tls`                                       | Array style TLS secrets for the web ingress.                                                                    | `[]`        |
+| `web.podSecurityContext.enabled`                        | Enabled Web pods' security context                                                                              | `true`      |
+| `web.podSecurityContext.runAsUser`                      | Set Web pod's security context runAsUser                                                                        | `991`       |
+| `web.podSecurityContext.runAsGroup`                     | Set Web pod's security context runAsGroup                                                                       | `991`       |
+| `web.podSecurityContext.fsGroup`                        | Set Web pod's security context fsGroup                                                                          | `991`       |
+| `web.containerSecurityContext.enabled`                  | Enabled Web containers' security context                                                                        | `false`     |
+| `web.containerSecurityContext.runAsUser`                | Set Web containers' security context runAsUser                                                                  | `1001`      |
+| `web.containerSecurityContext.allowPrivilegeEscalation` | Set Web containers' security context allowPrivilegeEscalation                                                   | `false`     |
+| `web.containerSecurityContext.capabilities.drop`        | Set Web containers' security context capabilities to be dropped                                                 | `["all"]`   |
+| `web.containerSecurityContext.readOnlyRootFilesystem`   | Set Web containers' security context readOnlyRootFilesystem                                                     | `false`     |
+| `web.containerSecurityContext.runAsNonRoot`             | Set Web container's security context runAsNonRoot                                                               | `true`      |
+| `web.affinity`                                          | Affinity for Web pods assignment                                                                                | `{}`        |
+| `web.nodeSelector`                                      | Node labels for Web pods assignment                                                                             | `{}`        |
+| `web.tolerations`                                       | Tolerations for Web pods assignment                                                                             | `[]`        |
+| `web.resources.limits`                                  | The resources limits for the web containers                                                                     | `{}`        |
+| `web.resources.requests`                                | The requested resources for the web containers                                                                  | `{}`        |
+| `web.autoscaling.enabled`                               | Whether to enable horizontal pod autoscaling. Make sure you set `resources.requests` if you enable autoscaling. | `false`     |
+| `web.autoscaling.minReplicas`                           | The minimum number of pod replicas to allow.                                                                    | `1`         |
+| `web.autoscaling.maxReplicas`                           | The maximum number of pod replicas to allow.                                                                    | `100`       |
+| `web.autoscaling.targetCPUUtilizationPercentage`        | The target CPU utilization percentage to aim for.                                                               | `80`        |
+| `web.autoscaling.targetMemoryUtilizationPercentage`     | The target memory utilization percentage to aim for.                                                            | `80`        |
 
 
 ### Sidekiq parameters
 
-| Name                                                        | Description                                                         | Value     |
-| ----------------------------------------------------------- | ------------------------------------------------------------------- | --------- |
-| `sidekiq.replicaCount`                                      | The number of replicas to deploy.                                   | `1`       |
-| `sidekiq.podSecurityContext.enabled`                        | Enabled Sidekiq pods' security context                              | `true`    |
-| `sidekiq.podSecurityContext.runAsUser`                      | Set Sidekiq pod's security context runAsUser                        | `991`     |
-| `sidekiq.podSecurityContext.runAsGroup`                     | Set Sidekiq pod's security context runAsGroup                       | `991`     |
-| `sidekiq.podSecurityContext.fsGroup`                        | Set Sidekiq pod's security context fsGroup                          | `991`     |
-| `sidekiq.containerSecurityContext.enabled`                  | Enabled Sidekiq containers' security context                        | `false`   |
-| `sidekiq.containerSecurityContext.runAsUser`                | Set Sidekiq containers' security context runAsUser                  | `1001`    |
-| `sidekiq.containerSecurityContext.allowPrivilegeEscalation` | Set Sidekiq containers' security context allowPrivilegeEscalation   | `false`   |
-| `sidekiq.containerSecurityContext.capabilities.drop`        | Set Sidekiq containers' security context capabilities to be dropped | `["all"]` |
-| `sidekiq.containerSecurityContext.readOnlyRootFilesystem`   | Set Sidekiq containers' security context readOnlyRootFilesystem     | `false`   |
-| `sidekiq.containerSecurityContext.runAsNonRoot`             | Set Sidekiq container's security context runAsNonRoot               | `true`    |
-| `sidekiq.affinity`                                          | Affinity for Sidekiq pods assignment                                | `{}`      |
-| `sidekiq.nodeSelector`                                      | Node labels for Sidekiq pods assignment                             | `{}`      |
-| `sidekiq.tolerations`                                       | Tolerations for Sidekiq pods assignment                             | `[]`      |
-| `sidekiq.resources.limits`                                  | The resources limits for the Sidekiq containers                     | `{}`      |
-| `sidekiq.resources.requests`                                | The requested resources for the Sidekiq containers                  | `{}`      |
-| `sidekiq.autoscaling.enabled`                               | Whether to enable horizontal pod autoscaling.                       | `false`   |
-| `sidekiq.autoscaling.minReplicas`                           | The minimum number of pod replicas to allow.                        | `1`       |
-| `sidekiq.autoscaling.maxReplicas`                           | The maximum number of pod replicas to allow.                        | `100`     |
-| `sidekiq.autoscaling.targetCPUUtilizationPercentage`        | The target CPU utilization percentage to aim for.                   | `80`      |
-| `sidekiq.autoscaling.targetMemoryUtilizationPercentage`     | The target memory utilization percentage to aim for.                | `80`      |
+| Name                                                        | Description                                                                                                     | Value     |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------- |
+| `sidekiq.replicaCount`                                      | The number of replicas to deploy.                                                                               | `1`       |
+| `sidekiq.podSecurityContext.enabled`                        | Enabled Sidekiq pods' security context                                                                          | `true`    |
+| `sidekiq.podSecurityContext.runAsUser`                      | Set Sidekiq pod's security context runAsUser                                                                    | `991`     |
+| `sidekiq.podSecurityContext.runAsGroup`                     | Set Sidekiq pod's security context runAsGroup                                                                   | `991`     |
+| `sidekiq.podSecurityContext.fsGroup`                        | Set Sidekiq pod's security context fsGroup                                                                      | `991`     |
+| `sidekiq.containerSecurityContext.enabled`                  | Enabled Sidekiq containers' security context                                                                    | `false`   |
+| `sidekiq.containerSecurityContext.runAsUser`                | Set Sidekiq containers' security context runAsUser                                                              | `1001`    |
+| `sidekiq.containerSecurityContext.allowPrivilegeEscalation` | Set Sidekiq containers' security context allowPrivilegeEscalation                                               | `false`   |
+| `sidekiq.containerSecurityContext.capabilities.drop`        | Set Sidekiq containers' security context capabilities to be dropped                                             | `["all"]` |
+| `sidekiq.containerSecurityContext.readOnlyRootFilesystem`   | Set Sidekiq containers' security context readOnlyRootFilesystem                                                 | `false`   |
+| `sidekiq.containerSecurityContext.runAsNonRoot`             | Set Sidekiq container's security context runAsNonRoot                                                           | `true`    |
+| `sidekiq.affinity`                                          | Affinity for Sidekiq pods assignment                                                                            | `{}`      |
+| `sidekiq.nodeSelector`                                      | Node labels for Sidekiq pods assignment                                                                         | `{}`      |
+| `sidekiq.tolerations`                                       | Tolerations for Sidekiq pods assignment                                                                         | `[]`      |
+| `sidekiq.resources.limits`                                  | The resources limits for the Sidekiq containers                                                                 | `{}`      |
+| `sidekiq.resources.requests`                                | The requested resources for the Sidekiq containers                                                              | `{}`      |
+| `sidekiq.autoscaling.enabled`                               | Whether to enable horizontal pod autoscaling. Make sure you set `resources.requests` if you enable autoscaling. | `false`   |
+| `sidekiq.autoscaling.minReplicas`                           | The minimum number of pod replicas to allow.                                                                    | `1`       |
+| `sidekiq.autoscaling.maxReplicas`                           | The maximum number of pod replicas to allow.                                                                    | `100`     |
+| `sidekiq.autoscaling.targetCPUUtilizationPercentage`        | The target CPU utilization percentage to aim for.                                                               | `80`      |
+| `sidekiq.autoscaling.targetMemoryUtilizationPercentage`     | The target memory utilization percentage to aim for.                                                            | `80`      |
 
 
 ### Streaming parameters
 
-| Name                                                          | Description                                                           | Value       |
-| ------------------------------------------------------------- | --------------------------------------------------------------------- | ----------- |
-| `streaming.replicaCount`                                      | The number of replicas to deploy.                                     | `1`         |
-| `streaming.service.type`                                      | The service type to create.                                           | `ClusterIP` |
-| `streaming.service.port`                                      | The service port to use.                                              | `4000`      |
-| `streaming.ingress.enabled`                                   | Enable ingress record generation for Mastodon streaming.              | `false`     |
-| `streaming.ingress.annotations`                               | Mapped annotations for the streaming ingress.                         | `{}`        |
-| `streaming.ingress.hosts`                                     | Array style hosts for the streaming ingress.                          | `[]`        |
-| `streaming.ingress.tls`                                       | Array style TLS secrets for the streaming ingress.                    | `[]`        |
-| `streaming.podSecurityContext.enabled`                        | Enabled Streaming pods' security context                              | `true`      |
-| `streaming.podSecurityContext.runAsUser`                      | Set Streaming pod's security context runAsUser                        | `991`       |
-| `streaming.podSecurityContext.runAsGroup`                     | Set Streaming pod's security context runAsGroup                       | `991`       |
-| `streaming.podSecurityContext.fsGroup`                        | Set Streaming pod's security context fsGroup                          | `991`       |
-| `streaming.containerSecurityContext.enabled`                  | Enabled Streaming containers' security context                        | `false`     |
-| `streaming.containerSecurityContext.runAsUser`                | Set Streaming containers' security context runAsUser                  | `1001`      |
-| `streaming.containerSecurityContext.allowPrivilegeEscalation` | Set Streaming containers' security context allowPrivilegeEscalation   | `false`     |
-| `streaming.containerSecurityContext.capabilities.drop`        | Set Streaming containers' security context capabilities to be dropped | `["all"]`   |
-| `streaming.containerSecurityContext.readOnlyRootFilesystem`   | Set Streaming containers' security context readOnlyRootFilesystem     | `false`     |
-| `streaming.containerSecurityContext.runAsNonRoot`             | Set Streaming container's security context runAsNonRoot               | `true`      |
-| `streaming.affinity`                                          | Affinity for Streaming pods assignment                                | `{}`        |
-| `streaming.nodeSelector`                                      | Node labels for Streaming pods assignment                             | `{}`        |
-| `streaming.tolerations`                                       | Tolerations for Streaming pods assignment                             | `[]`        |
-| `streaming.resources.limits`                                  | The resources limits for the streaming containers                     | `{}`        |
-| `streaming.resources.requests`                                | The requested resources for the streaming containers                  | `{}`        |
-| `streaming.autoscaling.enabled`                               | Whether to enable horizontal pod autoscaling.                         | `false`     |
-| `streaming.autoscaling.minReplicas`                           | The minimum number of pod replicas to allow.                          | `1`         |
-| `streaming.autoscaling.maxReplicas`                           | The maximum number of pod replicas to allow.                          | `100`       |
-| `streaming.autoscaling.targetCPUUtilizationPercentage`        | The target CPU utilization percentage to aim for.                     | `80`        |
-| `streaming.autoscaling.targetMemoryUtilizationPercentage`     | The target memory utilization percentage to aim for.                  | `80`        |
+| Name                                                          | Description                                                                                                     | Value       |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------- |
+| `streaming.replicaCount`                                      | The number of replicas to deploy.                                                                               | `1`         |
+| `streaming.service.type`                                      | The service type to create.                                                                                     | `ClusterIP` |
+| `streaming.service.port`                                      | The service port to use.                                                                                        | `4000`      |
+| `streaming.ingress.enabled`                                   | Enable ingress record generation for Mastodon streaming.                                                        | `false`     |
+| `streaming.ingress.annotations`                               | Mapped annotations for the streaming ingress.                                                                   | `{}`        |
+| `streaming.ingress.hosts`                                     | Array style hosts for the streaming ingress.                                                                    | `[]`        |
+| `streaming.ingress.tls`                                       | Array style TLS secrets for the streaming ingress.                                                              | `[]`        |
+| `streaming.podSecurityContext.enabled`                        | Enabled Streaming pods' security context                                                                        | `true`      |
+| `streaming.podSecurityContext.runAsUser`                      | Set Streaming pod's security context runAsUser                                                                  | `991`       |
+| `streaming.podSecurityContext.runAsGroup`                     | Set Streaming pod's security context runAsGroup                                                                 | `991`       |
+| `streaming.podSecurityContext.fsGroup`                        | Set Streaming pod's security context fsGroup                                                                    | `991`       |
+| `streaming.containerSecurityContext.enabled`                  | Enabled Streaming containers' security context                                                                  | `false`     |
+| `streaming.containerSecurityContext.runAsUser`                | Set Streaming containers' security context runAsUser                                                            | `1001`      |
+| `streaming.containerSecurityContext.allowPrivilegeEscalation` | Set Streaming containers' security context allowPrivilegeEscalation                                             | `false`     |
+| `streaming.containerSecurityContext.capabilities.drop`        | Set Streaming containers' security context capabilities to be dropped                                           | `["all"]`   |
+| `streaming.containerSecurityContext.readOnlyRootFilesystem`   | Set Streaming containers' security context readOnlyRootFilesystem                                               | `false`     |
+| `streaming.containerSecurityContext.runAsNonRoot`             | Set Streaming container's security context runAsNonRoot                                                         | `true`      |
+| `streaming.affinity`                                          | Affinity for Streaming pods assignment                                                                          | `{}`        |
+| `streaming.nodeSelector`                                      | Node labels for Streaming pods assignment                                                                       | `{}`        |
+| `streaming.tolerations`                                       | Tolerations for Streaming pods assignment                                                                       | `[]`        |
+| `streaming.resources.limits`                                  | The resources limits for the streaming containers                                                               | `{}`        |
+| `streaming.resources.requests`                                | The requested resources for the streaming containers                                                            | `{}`        |
+| `streaming.autoscaling.enabled`                               | Whether to enable horizontal pod autoscaling. Make sure you set `resources.requests` if you enable autoscaling. | `false`     |
+| `streaming.autoscaling.minReplicas`                           | The minimum number of pod replicas to allow.                                                                    | `1`         |
+| `streaming.autoscaling.maxReplicas`                           | The maximum number of pod replicas to allow.                                                                    | `100`       |
+| `streaming.autoscaling.targetCPUUtilizationPercentage`        | The target CPU utilization percentage to aim for.                                                               | `80`        |
+| `streaming.autoscaling.targetMemoryUtilizationPercentage`     | The target memory utilization percentage to aim for.                                                            | `80`        |
 
 
 ### Persistence parameters
@@ -198,6 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.localDomain`                                       | The root domain for the instance. For example, `instance.com`.                                                                                                                                                                                               | `mastodon.localdomain`                                                    |
 | `config.webDomain`                                         | If set, needs to be the subdomain of the local domain. For example, `mastodon.instance.com`. More information can be found [here](https://docs.joinmastodon.org/admin/config/#federation). Don't forget to check the proxy redirection requirements as well. | `""`                                                                      |
 | `config.singleUserMode`                                    | Whether to disable registrations and only use the single created account in the database.                                                                                                                                                                    | `false`                                                                   |
+| `config.emailWhitelist`                                    | If set, registrations will not be possible with any e-mails except those from the specified domains. A pipe separated list.                                                                                                                                  | `""`                                                                      |
 | `config.keys.secretKeyBase`                                | The secret key base, required to set up. You can generate it with `openssl rand -hex 64`. Ignored if set in an existing secret.                                                                                                                              | `""`                                                                      |
 | `config.keys.otpSecret`                                    | The OTP secret, required to set up. You can generate it with `openssl rand -hex 64`. Ignored if set in an existing secret.                                                                                                                                   | `""`                                                                      |
 | `config.keys.vapidPrivateKey`                              | The Vapid private key, required to set up. You can use `openssl` to generate, see example in [values.yaml](https://artifacthub.io/packages/helm/codechem/mastodon?modal=values). Ignored if set in an existing secret.                                       | `""`                                                                      |

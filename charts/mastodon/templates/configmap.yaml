@@ -339,3 +339,6 @@ data:
   LDAP_UID_CONVERSION_REPLACE: {{ .Values.config.providers.ldap.uidConversion.replace | quote }}
 {{- end }}
 {{- end }}
+{{- if .Values.config.emailWhitelist }}
+  EMAIL_DOMAIN_ALLOWLIST: {{ .Values.config.emailWhitelist | quote }}
+{{- end }}

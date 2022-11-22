@@ -410,11 +410,16 @@ config:
   ## @param config.localDomain The root domain for the instance. For example, `instance.com`.
   ## @param config.webDomain If set, needs to be the subdomain of the local domain. For example, `mastodon.instance.com`. More information can be found [here](https://docs.joinmastodon.org/admin/config/#federation). Don't forget to check the proxy redirection requirements as well.
   ## @param config.singleUserMode Whether to disable registrations and only use the single created account in the database.
+  ## @param config.emailWhitelist If set, registrations will not be possible with any e-mails except those from the specified domains. A pipe separated list.
   ##
   locale: "en"
   localDomain: "mastodon.localdomain"
   webDomain: ""
   singleUserMode: false
+  ## E.g.
+  ## emailWhitelist: "email@example.com|another@example.com"
+  ##
+  emailWhitelist: ""
   ## @param config.keys.secretKeyBase The secret key base, required to set up. You can generate it with `openssl rand -hex 64`. Ignored if set in an existing secret.
   ## @param config.keys.otpSecret The OTP secret, required to set up. You can generate it with `openssl rand -hex 64`. Ignored if set in an existing secret.
   ## @param config.keys.vapidPrivateKey The Vapid private key, required to set up. You can use `openssl` to generate, see example in [values.yaml](https://artifacthub.io/packages/helm/codechem/mastodon?modal=values). Ignored if set in an existing secret.
