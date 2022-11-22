@@ -16,6 +16,10 @@ spec:
   template:
     metadata:
       name: {{ include "mastodon.fullname" . }}-assets-precompile
+      {{- with .Values.job.assetsPrecompile.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       restartPolicy: Never
       containers:

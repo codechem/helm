@@ -13,7 +13,7 @@ spec:
       template:
         metadata:
           name: {{ include "mastodon.fullname" . }}-media-cleanup
-          {{- with .Values.jobAnnotations }}
+          {{- with .Values.job.cron.podAnnotations }}
           annotations:
             {{- toYaml . | nindent 12 }}
           {{- end }}

@@ -16,6 +16,10 @@ spec:
   template:
     metadata:
       name: {{ include "mastodon.fullname" . }}-database-migrations
+      {{- with .Values.job.databaseMigration.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       restartPolicy: Never
     {{- if .Values.global.postgresqlEnabled }}

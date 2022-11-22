@@ -17,6 +17,10 @@ spec:
   template:
     metadata:
       name: {{ include "mastodon.fullname" . }}-chewy-upgrade
+      {{- with .Values.job.chewyUpgrade.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       restartPolicy: Never
       containers:

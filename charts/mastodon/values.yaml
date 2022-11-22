@@ -366,10 +366,14 @@ persistence:
 ## Job parameters
 
 ## @param job.databaseMigration.annotations PostgreSQL Database Migration job annotations. Allows for additional annotations for the job, useful in GitOps scenarios like ArgoCD Helm deployments.
+## @param job.databaseMigration.podAnnotations PostgreSQL Database Migration job pod annotations. Allows for additional annotations for the job pod, for example useful for disabling sidecar injections from service mesh tools like Istio or Linkerd.
 ## @param job.assetsPrecompile.annotations Mastodon Assets precompile job annotations.
+## @param job.assetsPrecompile.podAnnotations Mastodon Assets precompile job pod annotations.
 ## @param job.chewyUpgrade.annotations Elasticsearch Chewy Upgrade job annotations.
+## @param job.chewyUpgrade.podAnnotations Elasticsearch Chewy Upgrade job pod annotations.
 ## @param job.cron.mediaRemoval.enabled Whether to enable the media removal cronjob.
 ## @param job.cron.mediaRemoval.schedule The interval of the media removal cronjob. Default is 1 week.
+## @param job.cron.podAnnotations Mastodon media removal cronjob pod annotations.
 ##
 job:
   databaseMigration:
@@ -380,14 +384,22 @@ job:
     ##   "argocd.argoproj.io/hook-delete-policy": BeforeHookCreation,HookSucceeded
     ##
     annotations: {}
+    ## E.g.
+    ## podAnnotations:
+    ##   "sidecar.istio.io/inject": false
+    ##
+    podAnnotations: {}
   assetsPrecompile:
     annotations: {}
+    podAnnotations: {}
   chewyUpgrade:
     annotations: {}
+    podAnnotations: {}
   cron:
     mediaRemoval:
       enabled: true
       schedule: "0 0 * * 0"
+    podAnnotations: {}
 
 ## @section Configuration parameters
 
