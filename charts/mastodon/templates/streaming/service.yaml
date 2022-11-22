@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mastodon.fullname" . }}-streaming
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mastodon.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.streaming.service.type }}
+  ports:
+    - port: {{ .Values.streaming.service.port }}
+      targetPort: streaming
+      protocol: TCP
+      name: streaming
+  selector:
+    {{- include "mastodon.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: streaming

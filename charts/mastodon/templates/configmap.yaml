@@ -1,0 +1,341 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mastodon.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mastodon.labels" . | nindent 4 }}
+data:
+  MALLOC_ARENA_MAX: "2"
+  NODE_ENV: "production"
+  RAILS_ENV: "production"
+  DEFAULT_LOCALE: {{ .Values.config.locale | quote }}
+  LOCAL_DOMAIN: {{ .Values.config.localDomain | quote }}
+{{- if .Values.config.webDomain }}
+  WEB_DOMAIN: {{ .Values.config.webDomain | quote }}
+{{- end }}
+  SINGLE_USER_MODE: {{ .Values.config.singleUserMode | quote}}
+  DB_POOL: {{ .Values.config.sidekiq.concurrency | quote }}
+  STREAMING_CLUSTER_NUM: {{ .Values.config.streaming.workers | quote }}
+{{- if .Values.config.streaming.baseURL }}
+  STREAMING_API_BASE_URL: {{ .Values.config.streaming.baseURL | quote }}
+{{- end }}
+{{- if .Values.global.postgresqlEnabled }}
+  DB_HOST: {{ template "mastodon.postgresql.fullname" . }}
+  DB_PORT: "5432"
+{{- else }}
+  DB_HOST: {{ .Values.config.postgresql.host | quote }}
+  DB_PORT: {{ .Values.config.postgresql.port | quote }}
+{{- end }}
+  DB_NAME: {{ .Values.config.postgresql.database | quote }}
+{{- if .Values.global.redisEnabled }}
+  REDIS_HOST: {{ template "mastodon.redis.fullname" . }}-master
+  REDIS_PORT: "6379"
+{{- else }}
+  REDIS_HOST: {{ .Values.config.redis.host | quote }}
+  REDIS_PORT: {{ .Values.config.redis.port | quote }}
+{{- end }}
+{{- if .Values.config.elasticsearch.enabled }}
+  ES_ENABLED: "true"
+  {{- if .Values.global.elasticsearchEnabled }}
+  ES_HOST: {{ template "mastodon.elasticsearch.fullname" . }}-master-hl
+  ES_PORT: "9200"
+  {{- else }}
+  ES_HOST: {{ .Values.config.elasticsearch.host | quote }}
+  ES_PORT: {{ .Values.config.elasticsearch.port | quote }}
+  {{- end }}
+{{- end }}
+{{- if eq .Values.config.storage.type "s3" }}
+  S3_ENABLED: "true"
+  S3_PROTOCOL: "https"
+{{- if .Values.config.storage.s3.region }}
+  S3_REGION: {{ .Values.config.storage.s3.region | quote }}
+{{- end }}
+  S3_BUCKET: {{ .Values.config.storage.s3.bucket | quote }}
+  S3_ENDPOINT: {{ .Values.config.storage.s3.endpointURI | quote }}
+  S3_HOSTNAME: {{ .Values.config.storage.s3.hostname | quote }}
+{{- if .Values.config.storage.s3.aliasHost }}
+  S3_ALIAS_HOST: {{ .Values.config.storage.s3.aliasHost | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.config.smtp.enabled }}
+{{- if .Values.config.smtp.caFile }}
+  SMTP_CA_FILE: {{ .Values.config.smtp.caFile }}
+{{- end }}
+{{- if .Values.config.smtp.authMethod }}
+  SMTP_AUTH_METHOD: {{ .Values.config.smtp.authMethod | quote }}
+{{- end }}
+{{- if .Values.config.smtp.deliveryMethod }}
+  SMTP_DELIVERY_METHOD: {{ .Values.config.smtp.deliveryMethod | quote }}
+{{- end }}
+{{- if .Values.config.smtp.fromAddress }}
+  SMTP_FROM_ADDRESS: {{ .Values.config.smtp.fromAddress | quote }}
+{{- end }}
+{{- if .Values.config.smtp.replyTo }}
+  SMTP_REPLY_TO: {{ .Values.config.smtp.replyTo }}
+{{- end }}
+{{- if .Values.config.smtp.domain }}
+  SMTP_DOMAIN: {{ .Values.config.smtp.domain | quote }}
+{{- end }}
+{{- if .Values.config.smtp.server }}
+  SMTP_SERVER: {{ .Values.config.smtp.server | quote }}
+{{- end }}
+{{- if .Values.config.smtp.port }}
+  SMTP_PORT: {{ .Values.config.smtp.port | quote }}
+{{- end }}
+{{- if .Values.config.smtp.enableStartTLS }}
+  SMTP_ENABLE_STARTTLS: {{ .Values.config.smtp.enableStartTLS | quote }}
+{{- end }}
+{{- if .Values.config.smtp.openSSLVerifyMode }}
+  SMTP_OPENSSL_VERIFY_MODE: {{ .Values.config.smtp.openSSLVerifyMode | quote }}
+{{- end }}
+{{- if .Values.config.smtp.tls }}
+  SMTP_TLS: {{ .Values.config.smtp.tls | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.config.metrics.statsd.address }}
+  STATSD_ADDR: {{ .Values.config.metrics.statsd.address | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.enabled }}
+  OIDC_ENABLED: {{ .Values.config.providers.oidc.enabled | quote }}
+{{- if .Values.config.providers.oidc.displayName }}
+  OIDC_DISPLAY_NAME: {{ .Values.config.providers.oidc.displayName | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.issuer }}
+  OIDC_ISSUER: {{ .Values.config.providers.oidc.issuer | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.discovery }}
+  OIDC_DISCOVERY: {{ .Values.config.providers.oidc.discovery | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.scope }}
+  OIDC_SCOPE: {{ .Values.config.providers.oidc.scope | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.uidField }}
+  OIDC_UID_FIELD: {{ .Values.config.providers.oidc.uidField | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.redirectURI }}
+  OIDC_REDIRECT_URI: {{ .Values.config.providers.oidc.redirectURI | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.assumeEmailVerified }}
+  OIDC_SECURITY_ASSUME_EMAIL_IS_VERIFIED: {{ .Values.config.providers.oidc.assumeEmailVerified | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.clientAuthMethod }}
+  OIDC_CLIENT_AUTH_METHOD: {{ .Values.config.providers.oidc.clientAuthMethod | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.responseType }}
+  OIDC_RESPONSE_TYPE: {{ .Values.config.providers.oidc.responseType | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.responseMode }}
+  OIDC_RESPONSE_MODE: {{ .Values.config.providers.oidc.responseMode | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.display }}
+  OIDC_DISPLAY: {{ .Values.config.providers.oidc.display | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.prompt }}
+  OIDC_PROMPT: {{ .Values.config.providers.oidc.prompt | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.sendNonce }}
+  OIDC_SEND_NONCE: {{ .Values.config.providers.oidc.sendNonce | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.sendScopeToTokenEndpoint }}
+  OIDC_SEND_SCOPE_TO_TOKEN_ENDPOINT: {{ .Values.config.providers.oidc.sendScopeToTokenEndpoint | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.idpLogoutRedirectURI }}
+  OIDC_IDP_LOGOUT_REDIRECT_URI: {{ .Values.config.providers.oidc.idpLogoutRedirectURI | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.httpScheme }}
+  OIDC_HTTP_SCHEME: {{ .Values.config.providers.oidc.httpScheme | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.host }}
+  OIDC_HOST: {{ .Values.config.providers.oidc.host | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.port }}
+  OIDC_PORT: {{ .Values.config.providers.oidc.port | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.jwksURI }}
+  OIDC_JWKS_URI: {{ .Values.config.providers.oidc.jwksURI | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.authEndpoint }}
+  OIDC_AUTH_ENDPOINT: {{ .Values.config.providers.oidc.authEndpoint | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.tokenEndpoint }}
+  OIDC_TOKEN_ENDPOINT: {{ .Values.config.providers.oidc.tokenEndpoint | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.userInfoEndpoint }}
+  OIDC_USER_INFO_ENDPOINT: {{ .Values.config.providers.oidc.userInfoEndpoint | quote }}
+{{- end }}
+{{- if .Values.config.providers.oidc.endSessionEndpoint }}
+  OIDC_END_SESSION_ENDPOINT: {{ .Values.config.providers.oidc.endSessionEndpoint | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.config.providers.saml.enabled }}
+  SAML_ENABLED: {{ .Values.config.providers.saml.enabled | quote }}
+{{- if .Values.config.providers.saml.acsURL }}
+  SAML_ACS_URL: {{ .Values.config.providers.saml.acsURL | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.issuer }}
+  SAML_ISSUER: {{ .Values.config.providers.saml.issuer | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.idpSsoTargetURL }}
+  SAML_IDP_SSO_TARGET_URL: {{ .Values.config.providers.saml.idpSsoTargetURL | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.idpCert }}
+  SAML_IDP_CERT: {{ .Values.config.providers.saml.idpCert | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.idpCertFingerprint }}
+  SAML_IDP_CERT_FINGERPRINT: {{ .Values.config.providers.saml.idpCertFingerprint | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.nameIdentifierFormat }}
+  SAML_NAME_IDENTIFIER_FORMAT: {{ .Values.config.providers.saml.nameIdentifierFormat | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.wantAssertionSigned }}
+  SAML_SECURITY_WANT_ASSERTION_SIGNED: {{ .Values.config.providers.saml.wantAssertionSigned | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.wantAssertionEncrypted }}
+  SAML_SECURITY_WANT_ASSERTION_ENCRYPTED: {{ .Values.config.providers.saml.wantAssertionEncrypted | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.assumeEmailVerified }}
+  SAML_SECURITY_ASSUME_EMAIL_IS_VERIFIED: {{ .Values.config.providers.saml.assumeEmailVerified | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.uidAttribute }}
+  SAML_UID_ATTRIBUTE: {{ .Values.config.providers.saml.uidAttribute | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.attributesStatements.uid }}
+  SAML_ATTRIBUTES_STATEMENTS_UID: {{ .Values.config.providers.saml.attributesStatements.uid | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.attributesStatements.email }}
+  SAML_ATTRIBUTES_STATEMENTS_EMAIL: {{ .Values.config.providers.saml.attributesStatements.email | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.attributesStatements.fullName }}
+  SAML_ATTRIBUTES_STATEMENTS_FULL_NAME: {{ .Values.config.providers.saml.attributesStatements.fullName | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.attributesStatements.firstName }}
+  SAML_ATTRIBUTES_STATEMENTS_FIRST_NAME: {{ .Values.config.providers.saml.attributesStatements.firstName | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.attributesStatements.lastName }}
+  SAML_ATTRIBUTES_STATEMENTS_LAST_NAME: {{ .Values.config.providers.saml.attributesStatements.lastName | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.attributesStatements.verified }}
+  SAML_ATTRIBUTES_STATEMENTS_VERIFIED: {{ .Values.config.providers.saml.attributesStatements.verified | quote }}
+{{- end }}
+{{- if .Values.config.providers.saml.attributesStatements.verifiedEmail }}
+  SAML_ATTRIBUTES_STATEMENTS_VERIFIED_EMAIL: {{ .Values.config.providers.saml.attributesStatements.verifiedEmail | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.config.providers.cas.enabled }}
+  CAS_ENABLED: {{ .Values.config.providers.cas.enabled | quote }}
+{{- if .Values.config.providers.cas.oauthRedirectAtSignIn }}
+  OAUTH_REDIRECT_AT_SIGN_IN: {{ .Values.config.providers.cas.oauthRedirectAtSignIn | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.url }}
+  CAS_URL: {{ .Values.config.providers.cas.url | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.host }}
+  CAS_HOST: {{ .Values.config.providers.cas.host | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.port }}
+  CAS_PORT: {{ .Values.config.providers.cas.port | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.ssl }}
+  CAS_SSL: {{ .Values.config.providers.cas.ssl | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.validateURL }}
+  CAS_VALIDATE_URL: {{ .Values.config.providers.cas.validateURL | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.callbackURL }}
+  CAS_CALLBACK_URL: {{ .Values.config.providers.cas.callbackURL | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.logoutURL }}
+  CAS_LOGOUT_URL: {{ .Values.config.providers.cas.logoutURL | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.loginURL }}
+  CAS_LOGIN_URL: {{ .Values.config.providers.cas.loginURL | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.uidField }}
+  CAS_UID_FIELD: {{ .Values.config.providers.cas.uidField | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.caPath }}
+  CAS_CA_PATH: {{ .Values.config.providers.cas.caPath | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.disableSslVerification }}
+  CAS_DISABLE_SSL_VERIFICATION: {{ .Values.config.providers.cas.disableSslVerification | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.assumeEmailVerified }}
+  CAS_SECURITY_ASSUME_EMAIL_IS_VERIFIED: {{ .Values.config.providers.cas.assumeEmailVerified | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.uid }}
+  CAS_UID_KEY: {{ .Values.config.providers.cas.keys.uid | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.name }}
+  CAS_NAME_KEY: {{ .Values.config.providers.cas.keys.name | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.email }}
+  CAS_EMAIL_KEY: {{ .Values.config.providers.cas.keys.email | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.nickname }}
+  CAS_NICKNAME_KEY: {{ .Values.config.providers.cas.keys.nickname | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.firstName }}
+  CAS_FIRST_NAME_KEY: {{ .Values.config.providers.cas.keys.firstName | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.lastName }}
+  CAS_LAST_NAME_KEY: {{ .Values.config.providers.cas.keys.lastName | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.location }}
+  CAS_LOCATION_KEY: {{ .Values.config.providers.cas.keys.location | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.image }}
+  CAS_IMAGE_KEY: {{ .Values.config.providers.cas.keys.image | quote }}
+{{- end }}
+{{- if .Values.config.providers.cas.keys.phone }}
+  CAS_PHONE_KEY: {{ .Values.config.providers.cas.keys.phone | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.config.providers.pam.enabled }}
+  PAM_ENABLED: {{ .Values.config.providers.pam.enabled | quote }}
+{{- if .Values.config.providers.pam.emailDomain }}
+  PAM_EMAIL_DOMAIN: {{ .Values.config.providers.pam.emailDomain | quote }}
+{{- end }}
+{{- if .Values.config.providers.pam.defaultService }}
+  PAM_DEFAULT_SERVICE: {{ .Values.config.providers.pam.defaultService | quote }}
+{{- end }}
+{{- if .Values.config.providers.pam.controlledService }}
+  PAM_CONTROLLED_SERVICE: {{ .Values.config.providers.pam.controlledService | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.config.providers.ldap.enabled }}
+  LDAP_ENABLED: {{ .Values.config.providers.ldap.enabled | quote }}
+{{- if .Values.config.providers.ldap.host }}
+  LDAP_HOST: {{ .Values.config.providers.ldap.host | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.port }}
+  LDAP_PORT: {{ .Values.config.providers.ldap.port | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.method }}
+  LDAP_METHOD: {{ .Values.config.providers.ldap.method | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.base }}
+  LDAP_BASE: {{ .Values.config.providers.ldap.base | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.bindOn }}
+  LDAP_BIND_ON: {{ .Values.config.providers.ldap.bindOn | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.uid }}
+  LDAP_UID: {{ .Values.config.providers.ldap.uid | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.mail }}
+  LDAP_MAIL: {{ .Values.config.providers.ldap.mail | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.searchFilter }}
+  LDAP_SEARCH_FILTER: {{ .Values.config.providers.ldap.searchFilter | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.uidConversion.enabled }}
+  LDAP_UID_CONVERSION_ENABLED: {{ .Values.config.providers.ldap.uidConversion.enabled | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.uidConversion.search }}
+  LDAP_UID_CONVERSION_SEARCH: {{ .Values.config.providers.ldap.uidConversion.search | quote }}
+{{- end }}
+{{- if .Values.config.providers.ldap.uidConversion.replace }}
+  LDAP_UID_CONVERSION_REPLACE: {{ .Values.config.providers.ldap.uidConversion.replace | quote }}
+{{- end }}
+{{- end }}

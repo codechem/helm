@@ -1,0 +1,212 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "mastodon.fullname" . }}-database-migrations
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mastodon.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-2"
+  {{- with .Values.job.databaseMigration.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  template:
+    metadata:
+      name: {{ include "mastodon.fullname" . }}-database-migrations
+    spec:
+      restartPolicy: Never
+    {{- if .Values.global.postgresqlEnabled }}
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: {{ include "mastodon.fullname" . }}-config
+          command: ['sh', '-c', 'until nc -vz ${DB_HOST} ${DB_PORT}; do echo "Waiting for postgresql to be ready..."; sleep 3; done;']
+    {{- end }}
+      containers:
+        - name: {{ include "mastodon.fullname" . }}-database-migrations
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          command:
+            - bundle
+            - exec
+            - rake
+            - db:migrate
+          envFrom:
+            - configMapRef:
+                name: {{ include "mastodon.fullname" . }}-config
+          env:
+            - name: PORT
+              value: {{ .Values.web.service.port | quote }}
+
+          {{- if not .Values.config.keys.secretKeys.secretKeyBaseKey }}
+            - name: SECRET_KEY_BASE
+              value: {{ required "SECRET_KEY_BASE not set" .Values.config.keys.secretKeyBase | quote }}
+          {{- else }}
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.keys.existingSecret }}
+                  key: {{ .Values.config.keys.secretKeys.secretKeyBaseKey }}
+          {{- end }}
+          {{- if not .Values.config.keys.secretKeys.otpSecretKey }}
+            - name: OTP_SECRET
+              value: {{ required "OTP_SECRET not set" .Values.config.keys.otpSecret | quote }}
+          {{- else }}
+            - name: OTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.keys.existingSecret }}
+                  key: {{ .Values.config.keys.secretKeys.otpSecretKey }}
+          {{- end }}
+          {{- if not .Values.config.keys.secretKeys.vapidPrivateKey }}
+            - name: VAPID_PRIVATE_KEY
+              value: {{ required "VAPID_PRIVATE_KEY not set" .Values.config.keys.vapidPrivateKey | quote }}
+          {{- else }}
+            - name: VAPID_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.keys.existingSecret }}
+                  key: {{ .Values.config.keys.secretKeys.vapidPrivateKey }}
+          {{- end }}
+          {{- if not .Values.config.keys.secretKeys.vapidPublicKey }}
+            - name: VAPID_PUBLIC_KEY
+              value: {{ required "VAPID_PUBLIC_KEY not set" .Values.config.keys.vapidPublicKey | quote }}
+          {{- else }}
+            - name: VAPID_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.keys.existingSecret }}
+                  key: {{ .Values.config.keys.secretKeys.vapidPublicKey }}
+          {{- end }}
+
+          {{- if not .Values.config.postgresql.secretKeys.usernameKey }}
+            - name: DB_USER
+              value: {{ .Values.config.postgresql.username | quote }}
+          {{- else }}
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.postgresql.existingSecret }}
+                  key: {{ .Values.config.postgresql.secretKeys.usernameKey }}
+          {{- end }}
+          {{- if not .Values.config.postgresql.secretKeys.passwordKey }}
+            - name: DB_PASS
+              value: {{ .Values.config.postgresql.password | quote }}
+          {{- else }}
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.postgresql.existingSecret }}
+                  key: {{ .Values.config.postgresql.secretKeys.passwordKey }}
+          {{- end }}
+
+        {{- if eq .Values.config.storage.type "s3" }}
+          {{- if not .Values.config.storage.s3.secretKeys.accessKeyIDKey }}
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ .Values.config.storage.s3.accessKeyID | quote }}
+          {{- else }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.storage.s3.existingSecret }}
+                  key: {{ .Values.config.storage.s3.secretKeys.accessKeyIDKey }}
+          {{- end }}
+          {{- if not .Values.config.storage.s3.secretKeys.secretAccessKey }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: {{ .Values.config.storage.s3.secretAccessKey | quote }}
+          {{- else }}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.storage.s3.existingSecret }}
+                  key: {{ .Values.config.storage.s3.secretKeys.secretAccessKey }}
+          {{- end }}
+        {{- end }}
+
+        {{- if .Values.config.smtp.enabled }}
+          {{- if not .Values.config.smtp.secretKeys.usernameKey }}
+            - name: SMTP_LOGIN
+              value: {{ .Values.config.smtp.username | quote }}
+          {{- else }}
+            - name: SMTP_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.smtp.existingSecret }}
+                  key: {{ .Values.config.smtp.secretKeys.usernameKey }}
+          {{- end }}
+          {{- if not .Values.config.smtp.secretKeys.passwordKey }}
+            - name: SMTP_PASSWORD
+              value: {{ .Values.config.smtp.password | quote }}
+          {{- else }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.smtp.existingSecret }}
+                  key: {{ .Values.config.smtp.secretKeys.passwordKey }}
+          {{- end }}
+        {{- end }}
+
+        {{- if .Values.config.providers.oidc.enabled }}
+          {{- if not .Values.config.providers.oidc.secretKeys.oidcClientIDKey }}
+            - name: OIDC_CLIENT_ID
+              value: {{ .Values.config.providers.oidc.clientID | quote }}
+          {{- else }}
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.providers.existingSecret }}
+                  key: {{ .Values.config.providers.oidc.secretKeys.oidcClientIDKey }}
+          {{- end }}
+          {{- if not .Values.config.providers.oidc.secretKeys.oidcCientSecretKey }}
+            - name: OIDC_CLIENT_SECRET
+              value: {{ .Values.config.providers.oidc.clientSecret | quote }}
+          {{- else }}
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.providers.existingSecret }}
+                  key: {{ .Values.config.providers.oidc.secretKeys.oidcCientSecretKey }}
+          {{- end }}
+        {{- end }}
+
+        {{- if .Values.config.providers.saml.enabled }}
+          {{- if not .Values.config.providers.saml.secretKeys.samlCertKey }}
+            - name: SAML_CERT
+              value: {{ .Values.config.providers.saml.cert | quote }}
+          {{- else }}
+            - name: SAML_CERT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.providers.existingSecret }}
+                  key: {{ .Values.config.providers.saml.secretKeys.samlCertKey }}
+          {{- end }}
+          {{- if not .Values.config.providers.saml.secretKeys.samlPrivateKey }}
+            - name: SAML_PRIVATE_KEY
+              value: {{ .Values.config.providers.saml.privateKey | quote }}
+          {{- else }}
+            - name: SAML_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.providers.existingSecret }}
+                  key: {{ .Values.config.providers.saml.secretKeys.samlPrivateKey }}
+          {{- end }}
+        {{- end }}
+
+        {{- if .Values.config.providers.ldap.enabled }}
+          {{- if not .Values.config.providers.ldap.secretKeys.ldapPasswordKey }}
+            - name: LDAP_PASSWORD
+              value: {{ .Values.config.providers.ldap.password | quote }}
+          {{- else }}
+            - name: LDAP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.providers.existingSecret }}
+                  key: {{ .Values.config.providers.ldap.secretKeys.ldapPasswordKey }}
+          {{- end }}
+        {{- end }}
