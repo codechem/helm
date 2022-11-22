@@ -129,7 +129,7 @@ web:
   resources:
     limits: {}
     requests: {}
-  ## @param web.autoscaling.enabled Whether to enable horizontal pod autoscaling.
+  ## @param web.autoscaling.enabled Whether to enable horizontal pod autoscaling. Make sure you set `resources.requests` if you enable autoscaling.
   ## @param web.autoscaling.minReplicas The minimum number of pod replicas to allow.
   ## @param web.autoscaling.maxReplicas The maximum number of pod replicas to allow.
   ## @param web.autoscaling.targetCPUUtilizationPercentage The target CPU utilization percentage to aim for.
@@ -200,7 +200,7 @@ sidekiq:
   resources:
     limits: {}
     requests: {}
-  ## @param sidekiq.autoscaling.enabled Whether to enable horizontal pod autoscaling.
+  ## @param sidekiq.autoscaling.enabled Whether to enable horizontal pod autoscaling. Make sure you set `resources.requests` if you enable autoscaling.
   ## @param sidekiq.autoscaling.minReplicas The minimum number of pod replicas to allow.
   ## @param sidekiq.autoscaling.maxReplicas The maximum number of pod replicas to allow.
   ## @param sidekiq.autoscaling.targetCPUUtilizationPercentage The target CPU utilization percentage to aim for.
@@ -300,7 +300,7 @@ streaming:
   resources:
     limits: {}
     requests: {}
-  ## @param streaming.autoscaling.enabled Whether to enable horizontal pod autoscaling.
+  ## @param streaming.autoscaling.enabled Whether to enable horizontal pod autoscaling. Make sure you set `resources.requests` if you enable autoscaling.
   ## @param streaming.autoscaling.minReplicas The minimum number of pod replicas to allow.
   ## @param streaming.autoscaling.maxReplicas The maximum number of pod replicas to allow.
   ## @param streaming.autoscaling.targetCPUUtilizationPercentage The target CPU utilization percentage to aim for.
