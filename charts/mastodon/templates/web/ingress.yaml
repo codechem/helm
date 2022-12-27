@@ -22,7 +22,7 @@ metadata:
 spec:
 {{- if .Values.web.ingress.tls }}
   tls:
-  {{- range .Values.ingress.tls }}
+  {{- range .Values.web.ingress.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
@@ -40,13 +40,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ $fullName }}
+                name: {{ $fullName }}-web
                 port:
                   number: {{ $svcPort }}
 {{ else }}
           - path: /
             backend:
-              serviceName: {{ $fullName }}
+              serviceName: {{ $fullName }}-web
               servicePort: {{ $svcPort }}
 {{- end }}
   {{- end }}
