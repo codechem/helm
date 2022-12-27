@@ -26,6 +26,41 @@ entries:
   mastodon:
   - apiVersion: v2
     appVersion: 4.0.2
+    created: "2022-12-27T14:24:32.107343689Z"
+    dependencies:
+    - condition: global.postgresqlEnabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - condition: global.redisEnabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - condition: global.elasticsearchEnabled
+      name: elasticsearch
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.x.x
+    description: CodeChem Mastodon Helm Chart
+    digest: 9b34867deaee0a4da0c14dc9ca93c21c1abfa14c26b299c49f068184b4ec2790
+    home: https://github.com/codechem/helm/tree/main/charts/mastodon
+    icon: https://files.mastodon.social/accounts/avatars/000/013/179/original/b4ceb19c9c54ec7e.png
+    keywords:
+    - kubernetes
+    - mastodon
+    - decentralized
+    - social
+    - network
+    maintainers:
+    - name: codechem
+      url: https://codechem.com
+    name: mastodon
+    sources:
+    - https://github.com/mastodon/mastodon
+    urls:
+    - https://github.com/codechem/helm/releases/download/mastodon-1.0.4/mastodon-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
+    appVersion: 4.0.2
     created: "2022-11-22T21:32:45.03179013Z"
     dependencies:
     - condition: global.postgresqlEnabled
@@ -465,4 +500,4 @@ entries:
     urls:
     - https://github.com/codechem/helm/releases/download/penpot-1.0.0/penpot-1.0.0.tgz
     version: 1.0.0
-generated: "2022-11-22T21:32:45.031834031Z"
+generated: "2022-12-27T14:24:32.107395792Z"
