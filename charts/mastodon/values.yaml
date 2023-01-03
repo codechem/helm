@@ -491,6 +491,7 @@ config:
   redis:
     host: "redis-master.redis.svc.cluster.local"
     port: 6379
+    password: ""
   ## @param config.elasticsearch.enabled Whether Elasticsearch is enabled. Differs from `global.elasticsearchEnabled`, which is used to confirm if you have your own elasticsearch instance, or you want to deploy one as a dependency chart.
   ## @param config.elasticsearch.host The Elasticsearch host to connect to. Only used if `global.elasticsearchEnabled` is `false`.
   ## @param config.elasticsearch.port The Elasticsearch host port to use. Only used if `global.elasticsearchEnabled` is `false`.

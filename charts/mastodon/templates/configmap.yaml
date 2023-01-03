@@ -34,6 +34,9 @@ data:
 {{- else }}
   REDIS_HOST: {{ .Values.config.redis.host | quote }}
   REDIS_PORT: {{ .Values.config.redis.port | quote }}
+{{- if .Values.config.redis.password }}
+  REDIS_PASSWORD: {{ .Values.config.redis.password | quote }}
+{{- end }}
 {{- end }}
 {{- if .Values.config.elasticsearch.enabled }}
   ES_ENABLED: "true"
