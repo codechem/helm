@@ -20,9 +20,14 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+  {{- if .Values.frontend.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.frontend.ingress.ingressClassName }}
+  {{- end }}
+{{- end }}
 {{- if .Values.frontend.ingress.tls }}
   tls:
-  {{- range .Values.ingress.tls }}
+  {{- range .Values.frontend.ingress.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
