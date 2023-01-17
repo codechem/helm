@@ -245,7 +245,7 @@ spec:
                   name: {{ .Values.config.providers.existingSecret }}
                   key: {{ .Values.config.providers.secretKeys.oidcClientIDKey }}
           {{- end }}
-          {{- if not .Values.config.providers.secretKeys.oidcCientSecretKey}}
+          {{- if not .Values.config.providers.secretKeys.oidcClientSecretKey}}
             - name: PENPOT_OIDC_CLIENT_SECRET
               value: {{ .Values.config.providers.oidc.clientSecret | quote }}
           {{- else }}
@@ -253,7 +253,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.config.providers.existingSecret }}
-                  key: {{ .Values.config.providers.secretKeys.oidcCientSecretKey }}
+                  key: {{ .Values.config.providers.secretKeys.oidcClientSecretKey }}
           {{- end }}
           {{- if .Values.config.providers.oidc.authURI }}
             - name: PENPOT_OIDC_AUTH_URI
