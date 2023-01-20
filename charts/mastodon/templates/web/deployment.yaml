@@ -184,7 +184,7 @@ spec:
                   name: {{ .Values.config.providers.existingSecret }}
                   key: {{ .Values.config.providers.oidc.secretKeys.oidcClientIDKey }}
           {{- end }}
-          {{- if not .Values.config.providers.oidc.secretKeys.oidcCientSecretKey }}
+          {{- if not .Values.config.providers.oidc.secretKeys.oidcClientSecretKey }}
             - name: OIDC_CLIENT_SECRET
               value: {{ .Values.config.providers.oidc.clientSecret | quote }}
           {{- else }}
@@ -192,7 +192,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.config.providers.existingSecret }}
-                  key: {{ .Values.config.providers.oidc.secretKeys.oidcCientSecretKey }}
+                  key: {{ .Values.config.providers.oidc.secretKeys.oidcClientSecretKey }}
           {{- end }}
         {{- end }}
 
@@ -372,7 +372,7 @@ spec:
                   name: {{ .Values.config.providers.existingSecret }}
                   key: {{ .Values.config.providers.oidc.secretKeys.oidcClientIDKey }}
           {{- end }}
-          {{- if not .Values.config.providers.oidc.secretKeys.oidcCientSecretKey }}
+          {{- if not .Values.config.providers.oidc.secretKeys.oidcClientSecretKey }}
             - name: OIDC_CLIENT_SECRET
               value: {{ .Values.config.providers.oidc.clientSecret | quote }}
           {{- else }}
@@ -380,7 +380,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.config.providers.existingSecret }}
-                  key: {{ .Values.config.providers.oidc.secretKeys.oidcCientSecretKey }}
+                  key: {{ .Values.config.providers.oidc.secretKeys.oidcClientSecretKey }}
           {{- end }}
         {{- end }}
 

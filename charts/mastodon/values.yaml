@@ -762,7 +762,7 @@ config:
         replace: "_"
     ## @param config.providers.existingSecret The name of an existing secret to use.
     ## @param config.providers.secretKeys.oidcClientIDKey The OpenID Connect client ID key to use from an existing secret.
-    ## @param config.providers.secretKeys.oidcCientSecretKey The OpenID Connect client secret key to use from an existing secret.
+    ## @param config.providers.secretKeys.oidcClientSecretKey The OpenID Connect client secret key to use from an existing secret.
     ## @param config.providers.secretKeys.samlCertKey The SAML certificate key to use from an existing secret.
     ## @param config.providers.secretKeys.samlPrivateKey The SAML private key to use from an existing secret.
     ## @param config.providers.secretKeys.ldapPasswordKey The LDAP password key to use from an existing secret.
@@ -770,7 +770,7 @@ config:
     existingSecret: ""
     secretKeys:
       oidcClientIDKey: ""
-      oidcCientSecretKey: ""
+      oidcClientSecretKey: ""
       samlCertKey: ""
       samlPrivateKey: ""
       ldapPasswordKey: ""
