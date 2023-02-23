@@ -4,7 +4,7 @@ maintainers:
     url: https://codechem.com
 apiVersion: v2
 appVersion: 4.0.2
-version: 1.0.4
+version: 1.0.5
 description: CodeChem Mastodon Helm Chart
 home: https://github.com/codechem/helm/tree/main/charts/mastodon
 icon: https://files.mastodon.social/accounts/avatars/000/013/179/original/b4ceb19c9c54ec7e.png
