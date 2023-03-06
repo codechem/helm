@@ -11,7 +11,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-streaming
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "mastodon.labels" . | nindent 4 }}
@@ -40,13 +40,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ $fullName }}
+                name: {{ $fullName }}-streaming
                 port:
                   number: {{ $svcPort }}
 {{ else }}
           - path: /
             backend:
-              serviceName: {{ $fullName }}
+              serviceName: {{ $fullName }}-streaming
               servicePort: {{ $svcPort }}
 {{- end }}
   {{- end }}

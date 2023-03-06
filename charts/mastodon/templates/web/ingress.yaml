@@ -11,7 +11,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-web
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "mastodon.labels" . | nindent 4 }}
