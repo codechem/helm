@@ -7,6 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array.
 ##
 global:
+  storageClass: {{ .Values.persistance.storageClass }}
   postgresqlEnabled: false
   redisEnabled: false
   ## E.g.
