@@ -43,7 +43,7 @@ backend:
   ##
   image:
     repository: penpotapp/backend
-    tag: 1.16.0-beta
+    tag: 1.18.1
     imagePullPolicy: IfNotPresent
   ## @param backend.replicaCount The number of replicas to deploy.
   ##
@@ -112,7 +112,7 @@ frontend:
   ##
   image:
     repository: penpotapp/frontend
-    tag: 1.16.0-beta
+    tag: 1.18.1
     imagePullPolicy: IfNotPresent
   ## @param frontend.replicaCount The number of replicas to deploy.
   ##
@@ -178,7 +178,7 @@ exporter:
   ##
   image:
     repository: penpotapp/exporter
-    tag: 1.16.0-beta
+    tag: 1.18.1
     imagePullPolicy: IfNotPresent
   ## @param exporter.replicaCount The number of replicas to deploy.
   ##
