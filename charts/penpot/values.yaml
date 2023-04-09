@@ -474,6 +474,7 @@ postgresql:
   auth:
     username: example
     password: secretpassword
+    enablePostgresUser: false
     database: penpot
 
 ## @section Redis configuration (Check for [more parameters here](https://artifacthub.io/packages/helm/bitnami/redis))
