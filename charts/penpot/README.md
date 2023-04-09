@@ -65,9 +65,9 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Backend parameters
 
 | Name                                                        | Description                                                        | Value               |
-| ----------------------------------------------------------- | ------------------------------------------------------------------ | ------------------- |
+| ----------------------------------------------------------- | ------------------------------------------------------------------ |---------------------|
 | `backend.image.repository`                                  | The Docker repository to pull the image from.                      | `penpotapp/backend` |
-| `backend.image.tag`                                         | The image tag to use.                                              | `1.16.0-beta`       |
+| `backend.image.tag`                                         | The image tag to use.                                              | `1.18.1`            |
 | `backend.image.imagePullPolicy`                             | The image pull policy to use.                                      | `IfNotPresent`      |
 | `backend.replicaCount`                                      | The number of replicas to deploy.                                  | `1`                 |
 | `backend.service.type`                                      | The service type to create.                                        | `ClusterIP`         |
@@ -90,9 +90,9 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Frontend parameters
 
 | Name                             | Description                                                | Value                |
-| -------------------------------- | ---------------------------------------------------------- | -------------------- |
+| -------------------------------- | ---------------------------------------------------------- |----------------------|
 | `frontend.image.repository`      | The Docker repository to pull the image from.              | `penpotapp/frontend` |
-| `frontend.image.tag`             | The image tag to use.                                      | `1.16.0-beta`        |
+| `frontend.image.tag`             | The image tag to use.                                      | `1.18.1`             |
 | `frontend.image.imagePullPolicy` | The image pull policy to use.                              | `IfNotPresent`       |
 | `frontend.replicaCount`          | The number of replicas to deploy.                          | `1`                  |
 | `frontend.service.type`          | The service type to create.                                | `ClusterIP`          |
@@ -111,9 +111,9 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Exporter parameters
 
 | Name                                                         | Description                                                        | Value                |
-| ------------------------------------------------------------ | ------------------------------------------------------------------ | -------------------- |
+| ------------------------------------------------------------ | ------------------------------------------------------------------ |----------------------|
 | `exporter.image.repository`                                  | The Docker repository to pull the image from.                      | `penpotapp/exporter` |
-| `exporter.image.tag`                                         | The image tag to use.                                              | `1.16.0-beta`        |
+| `exporter.image.tag`                                         | The image tag to use.                                              | `1.18.1`             |
 | `exporter.image.imagePullPolicy`                             | The image pull policy to use.                                      | `IfNotPresent`       |
 | `exporter.replicaCount`                                      | The number of replicas to deploy.                                  | `1`                  |
 | `exporter.service.type`                                      | The service type to create.                                        | `ClusterIP`          |
